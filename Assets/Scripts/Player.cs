@@ -36,7 +36,7 @@ public class Player : MonoBehaviour
     public PlayerIdleState idleState {  get; private set; }
     public PlayerMoveState moveState {  get; private set; }
     public PlayerJumpState jumpState {  get; private set; }
-    public PlayerAirState airState {  get; private set; }
+    public PlayerFallState airState {  get; private set; }
     public PlayerDashState dashState { get; private set; }
     public PlayerWallSliceState wallSlice { get; private set; }
     public PlayerWallJumpState wallJump { get; private set; }
@@ -52,7 +52,7 @@ public class Player : MonoBehaviour
         idleState = new PlayerIdleState(this, stateMachine, "Idle");
         moveState = new PlayerMoveState(this, stateMachine, "Move");
         jumpState = new PlayerJumpState(this, stateMachine, "Jump");
-        airState = new PlayerAirState(this, stateMachine, "Jump");
+        airState = new PlayerFallState(this, stateMachine, "Jump");
         dashState = new PlayerDashState(this, stateMachine, "Dash");
         wallSlice = new PlayerWallSliceState(this, stateMachine, "WallSlice");
         wallJump = new PlayerWallJumpState(this, stateMachine, "Jump");

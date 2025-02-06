@@ -25,16 +25,11 @@ public class PlayerAirState : PlayerState
         if (xInput != 0)
         {
             player.SetVelocity(xInput * player.moveSpeed * 0.8f, rb.velocity.y);
-        }
 
-        if (player.IsWall())
-        {
-            stateMachine.ChangeState(player.wallSlice);
-        }
-
-        if (player.IsGrounded())
-        {
-            stateMachine.ChangeState(player.idleState);
+            if (player.IsWall())
+            {
+                stateMachine.ChangeState(player.wallSlice);
+            }
         }
     }
 }
