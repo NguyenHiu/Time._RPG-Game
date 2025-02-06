@@ -6,16 +6,16 @@ using UnityEngine;
 public class EnemyState
 {
     public EnemyStateMachine stateMachine { get; private set; }
-    public Enemy enemy { get; private set; }
+    public Enemy enemyBase { get; private set; }
 
     protected bool triggeredAnim;
     protected float stateTimer;
     private string animName;
 
-    public EnemyState(EnemyStateMachine _stateMachine, Enemy _enemy, string _animName)
+    public EnemyState(Enemy _enemyBase, EnemyStateMachine _stateMachine, string _animName)
     {
         this.stateMachine = _stateMachine;
-        this.enemy = _enemy;
+        this.enemyBase = _enemyBase;
         this.animName = _animName;
     }
 
@@ -27,12 +27,12 @@ public class EnemyState
     public virtual void Enter()
     {
         triggeredAnim = false;
-        enemy.anim.SetBool(animName, true);
+        enemyBase.anim.SetBool(animName, true);
     }
 
     public virtual void Exit()
     {
-        enemy.anim.SetBool(animName, false);
+        enemyBase.anim.SetBool(animName, false);
     }
 
     public void TriggerAnim() => triggeredAnim = true;
