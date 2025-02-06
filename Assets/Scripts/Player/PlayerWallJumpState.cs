@@ -31,12 +31,12 @@ public class PlayerWallJumpState : PlayerState
             stateMachine.ChangeState(player.airState);
         }
 
-        if (player.IsGrounded())
+        if (player.IsGroundDetected())
         {
             stateMachine.ChangeState(player.idleState);
         }
 
-        if (player.IsWall())
+        if (player.IsWallDetected())
         {
             stateMachine.ChangeState(player.wallSlice);
         }

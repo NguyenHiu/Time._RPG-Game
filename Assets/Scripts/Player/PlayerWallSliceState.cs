@@ -33,12 +33,12 @@ public class PlayerWallSliceState : PlayerState
             player.rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * 0.7f);
         }
 
-        if (player.IsGrounded())
+        if (player.IsGroundDetected())
         {
             stateMachine.ChangeState(player.idleState);
         } 
         
-        else if (!player.IsWall())
+        else if (!player.IsWallDetected())
         {
             stateMachine.ChangeState(player.airState);
         }

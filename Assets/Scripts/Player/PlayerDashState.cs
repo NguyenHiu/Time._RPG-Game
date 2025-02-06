@@ -28,7 +28,7 @@ public class PlayerDashState : PlayerState
         {
             stateMachine.ChangeState(player.idleState);
         }
-        if (player.IsWall())
+        if (player.IsWallDetected())
         {
             stateMachine.ChangeState(player.wallSlice);
         }

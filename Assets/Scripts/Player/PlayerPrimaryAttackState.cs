@@ -42,7 +42,7 @@ public class PlayerPrimaryAttackState : PlayerState
         base.Update();
 
         if (stateTimer < 0) {
-            player.SetVelocity(0, 0);
+            player.SetZeroVelocity();
         }
 
         if (triggeredAnim)

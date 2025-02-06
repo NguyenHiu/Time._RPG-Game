@@ -68,7 +68,7 @@ public class Player : Entity
         }
         dashTimer -= Time.deltaTime;
         
-        if (IsWall()) { return; }
+        if (IsWallDetected()) { return; }
         if (Input.GetKeyDown(KeyCode.LeftShift) && dashTimer < 0)
         {
             dashTimer = dashCooldown;
