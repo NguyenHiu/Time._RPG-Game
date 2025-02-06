@@ -26,17 +26,19 @@ public class PlayerWallSliceState : PlayerState
         
         if (yInput < 0)
         {
-            player.SetVelocity(rb.velocity.x, rb.velocity.y);
+            player.rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y);
         }
         else
         {
-            player.SetVelocity(rb.velocity.x, rb.velocity.y * 0.7f);
+            player.rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * 0.7f);
         }
 
         if (player.IsGrounded())
         {
             stateMachine.ChangeState(player.idleState);
-        } else if (!player.IsWall())
+        } 
+        
+        else if (!player.IsWall())
         {
             stateMachine.ChangeState(player.airState);
         }
