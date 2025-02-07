@@ -31,10 +31,21 @@ public class SkeletonBattleState : EnemyState
         base.Update();
 
         RaycastHit2D rc = enemy.IsPlayerDetected();
-        if (rc && rc.distance < enemy.attackRange)
+        if (rc)
         {
-            stateMachine.ChangeState(enemy.attackState);
-            return;
+            stateTimer = enemy.battleTime;
+            if (rc.distance < enemy.attackRange && Time.time > enemy.attackCooldown + enemy.lastTimeAttack)
+            {
+                stateMachine.ChangeState(enemy.attackState);
+                return;
+            } 
+         } else
+        {
+            if (stateTimer < 0 || Vector2.Distance(enemy.transform.position, player.transform.position) > enemy.battleRange)
+            {
+                stateMachine.ChangeState(enemy.idleState);
+                return;
+            }
         }
 
         if (player.transform.position.x > enemy.rb.position.x)
@@ -45,6 +56,6 @@ public class SkeletonBattleState : EnemyState
             moveDir = -1;
         }
 
-        enemy.SetVelocity(enemy.moveSpeed * moveDir, enemy.rb.velocity.y);
+        enemy.SetVelocity(enemy.battleSpeed * moveDir, enemy.rb.velocity.y);
     }
 }

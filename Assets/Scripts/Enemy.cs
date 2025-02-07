@@ -11,9 +11,17 @@ public class Enemy : Entity
     public float moveSpeed;
     public float idleTime;
 
+    [Header("Battle info")]
+    public float detectPlayerForwardDistance;
+    public float detectPlayerBehindDistance;
+    public float battleTime;
+    public float battleRange;
+    public float battleSpeed;
+
     [Header("Attack info")]
-    public float playerDetectDistance;
     public float attackRange;
+    public float attackCooldown;
+    [HideInInspector] public float lastTimeAttack;
 
     protected override void Awake()
     {
@@ -34,12 +42,25 @@ public class Enemy : Entity
     }
 
     #region Collision Checks
-    public virtual RaycastHit2D IsPlayerDetected() => Physics2D.Raycast(wallCheck.position, new Vector2(facingDir, 0), playerDetectDistance, whatIsPlayer);
+    public virtual RaycastHit2D IsPlayerDetected()
+    {
+        RaycastHit2D forward = Physics2D.Raycast(wallCheck.position, new Vector2(facingDir, 0), detectPlayerForwardDistance, whatIsPlayer);
+        if (forward)
+        {
+            return forward;
+        }
+
+        RaycastHit2D behind = Physics2D.Raycast(wallCheck.position, new Vector2(-facingDir, 0), detectPlayerBehindDistance, whatIsPlayer);
+        return behind;
+    }
+
     protected override void OnDrawGizmos()
     {
         base.OnDrawGizmos();
-        
-        Gizmos.DrawLine(wallCheck.position, new Vector3(wallCheck.position.x + facingDir * playerDetectDistance, wallCheck.position.y));
+
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawLine(wallCheck.position, new Vector3(wallCheck.position.x + facingDir * detectPlayerForwardDistance, wallCheck.position.y));
+        Gizmos.DrawLine(wallCheck.position, new Vector3(wallCheck.position.x - facingDir * detectPlayerBehindDistance, wallCheck.position.y));
     }
     #endregion
 

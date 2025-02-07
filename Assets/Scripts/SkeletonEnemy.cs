@@ -38,7 +38,13 @@ public class SkeletonEnemy : Enemy
     {
         base.OnDrawGizmos();
 
-        Gizmos.color = Color.yellow;
+        Gizmos.color = Color.red;
         Gizmos.DrawLine(transform.position, new Vector3(transform.position.x + facingDir * attackRange, transform.position.y));
+        
+        Gizmos.color = Color.green;
+        Gizmos.DrawLine(
+            new Vector3(transform.position.x - battleRange, transform.position.y - 0.2f), 
+            new Vector3(transform.position.x + battleRange, transform.position.y - 0.2f)
+        );
     }
 }
