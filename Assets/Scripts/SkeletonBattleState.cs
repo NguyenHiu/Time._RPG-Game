@@ -18,7 +18,6 @@ public class SkeletonBattleState : EnemyState
         base.Enter();
 
         player = GameObject.Find("Player");
-        Debug.Log("I'm in battle mode!");
     }
 
     public override void Exit()
@@ -34,12 +33,17 @@ public class SkeletonBattleState : EnemyState
         if (rc)
         {
             stateTimer = enemy.battleTime;
-            if (rc.distance < enemy.attackRange && Time.time > enemy.attackCooldown + enemy.lastTimeAttack)
+            if (
+                rc.distance < enemy.attackRange &&
+                Time.time > enemy.attackCooldown + enemy.lastTimeAttack &&
+                // Ensure that the enemy is facing to the player
+                rc.rigidbody.position.x * enemy.facingDir > enemy.transform.position.x * enemy.facingDir
+            )
             {
                 stateMachine.ChangeState(enemy.attackState);
                 return;
             } 
-         } else
+        } else
         {
             if (stateTimer < 0 || Vector2.Distance(enemy.transform.position, player.transform.position) > enemy.battleRange)
             {

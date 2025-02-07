@@ -15,9 +15,6 @@ public class SkeletonAttackState : EnemyState
     {
         base.Enter();
         enemy.SetZeroVelocity();
-
-        Debug.Log("Watch-out, I gonna attack!");
-
     }
 
     public override void Exit()
