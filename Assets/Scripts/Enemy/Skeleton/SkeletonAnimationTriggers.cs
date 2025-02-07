@@ -11,9 +11,9 @@ public class SkeletonAnimationTriggers : MonoBehaviour
         enemy = GetComponentInParent<Enemy>();
     }
 
-    public void TriggerAnim() => enemy.TriggerCurrentAnim();
+    private void TriggerAnim() => enemy.TriggerCurrentAnim();
 
-    public void TriggerAttack()
+    private void TriggerAttack()
     {
         Collider2D[] colliders = Physics2D.OverlapCircleAll(enemy.attackCheck.position, enemy.attackRadius);
 
@@ -25,5 +25,14 @@ public class SkeletonAnimationTriggers : MonoBehaviour
                 e.Damage();
             }
         }
+    }
+
+    private void OpenCounterArea()
+    {
+        enemy.OpenCounterArea();
+    }
+    private void CloseCounterArea()
+    {
+        enemy.CloseCounterArea();
     }
 }

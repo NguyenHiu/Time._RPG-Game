@@ -6,12 +6,12 @@ public class Enemy : Entity
 {
     public EnemyStateMachine stateMachine {  get; private set; }
 
-    [SerializeField] protected LayerMask whatIsPlayer;
     [Header("Move info")]
     public float moveSpeed;
     public float idleTime;
 
     [Header("Battle info")]
+    [SerializeField] protected LayerMask whatIsPlayer;
     public float detectPlayerForwardDistance;
     public float detectPlayerBehindDistance;
     public float battleTime;
@@ -22,6 +22,13 @@ public class Enemy : Entity
     public float attackRange;
     public float attackCooldown;
     [HideInInspector] public float lastTimeAttack;
+    [SerializeField] protected GameObject counterArea;
+    protected bool canBeStunned;
+
+
+    [Header("Stunned info")]
+    public float stunnedDuration;
+    public Vector2 stunnedDir;
 
     protected override void Awake()
     {
@@ -65,4 +72,27 @@ public class Enemy : Entity
     #endregion
 
     public void TriggerCurrentAnim() => stateMachine.currentState.TriggerAnim();
+
+    public virtual void OpenCounterArea()
+    {
+        canBeStunned = true;
+        counterArea.SetActive(true);
+    }
+
+    public virtual void CloseCounterArea()
+    {
+        canBeStunned = false;
+        counterArea.SetActive(false);
+    }
+
+    public virtual bool CanBeStunned()
+    {
+        return canBeStunned;
+    }
+
+    public virtual void BeCounter()
+    {
+        canBeStunned = false;
+        CloseCounterArea();
+    }
 }

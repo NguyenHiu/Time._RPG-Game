@@ -34,7 +34,12 @@ public class PlayerGroundedState : PlayerState
 
         if (Input.GetKeyDown(KeyCode.Mouse0) && player.IsGroundDetected())
         {
-            stateMachine.ChangeState(player.primaryAttackState);
+            stateMachine.ChangeState(player.primaryAttack);
+        }
+
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            stateMachine.ChangeState(player.counterAttack);
         }
     }
 }

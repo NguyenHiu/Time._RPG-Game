@@ -10,6 +10,7 @@ public class SkeletonEnemy : Enemy
     public SkeletonMoveState moveState { get; private set; }
     public SkeletonBattleState battleState { get; private set; }
     public SkeletonAttackState attackState { get; private set; }
+    public SkeletonStunnedState stunnedState { get; private set; }
     #endregion
 
     protected override void Awake()
@@ -20,6 +21,7 @@ public class SkeletonEnemy : Enemy
         moveState = new SkeletonMoveState(this, stateMachine, "Move", this);
         battleState = new SkeletonBattleState(this, stateMachine, "Move", this);
         attackState = new SkeletonAttackState(this, stateMachine, "Attack", this);
+        stunnedState = new SkeletonStunnedState(this, stateMachine, "Stunned", this);
     }
 
     protected override void Start()
@@ -46,5 +48,11 @@ public class SkeletonEnemy : Enemy
             new Vector3(transform.position.x - battleRange, transform.position.y - 0.2f), 
             new Vector3(transform.position.x + battleRange, transform.position.y - 0.2f)
         );
+    }
+
+    public override void BeCounter()
+    {
+        base.BeCounter();
+        stateMachine.ChangeState(stunnedState);
     }
 }
