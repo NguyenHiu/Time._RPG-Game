@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class CloneSkillController : MonoBehaviour
 {
-    [SerializeField] private float cloneDuration;
     [SerializeField] private float losingSpeed;
     [SerializeField] private float cloneTimer;
     [SerializeField] private SpriteRenderer sr;
@@ -23,9 +22,9 @@ public class CloneSkillController : MonoBehaviour
         }
     }
 
-    public void SetupClone(Vector2 _pos)
+    public void SetupClone(Vector2 _pos, float _cloneDuration)
     {
         transform.position = _pos;
-        cloneTimer = cloneDuration;
+        cloneTimer = _cloneDuration;
     }
 }
