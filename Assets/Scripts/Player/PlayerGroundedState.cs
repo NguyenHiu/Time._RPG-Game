@@ -46,6 +46,11 @@ public class PlayerGroundedState : PlayerState
         {
             stateMachine.ChangeState(player.aimSwordState);
         }
+
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            stateMachine.ChangeState(player.blackHoleUltimateState);
+        }
     }
 
     // TryCreateSword returns true if player can create new sword
