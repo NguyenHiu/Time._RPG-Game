@@ -15,6 +15,7 @@ public class BlackHoleHotkey : MonoBehaviour
         text = GetComponentInChildren<TextMeshProUGUI>();
     }
 
+    // SetHotKey prepares the hotkey object
     public void SetHotKey(KeyCode _key, Vector2 _pos, Enemy _belongTo)
     {
         key = _key;
@@ -25,6 +26,8 @@ public class BlackHoleHotkey : MonoBehaviour
 
     private void Update()
     {
+        // If player presses the correct key, we will se the `isPressed` to true
+        // This variable will be used to chose enemies to be attacked after the pick time of the black hole
         if (Input.GetKeyDown(key))
         {
             text.color = Color.clear;

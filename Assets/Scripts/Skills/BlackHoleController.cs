@@ -8,24 +8,17 @@ public class BlackHoleController : MonoBehaviour
 {
     [SerializeField] private GameObject textPrefab;
 
-    private CircleCollider2D cCollider;
-    public float maxRadius;
-    public float growthSpeed;
-    public float shrinkSpeed;
-    public bool isGrowing;
-    public bool isShrinking;
-    public float pickTime;
-    public List<KeyCode> validKeys;
-    public int attackTimes;
+    private float maxRadius;
+    private float growthSpeed;
+    private float shrinkSpeed;
+    private bool isGrowing;
+    private bool isShrinking;
+    private float pickTime;
+    private List<KeyCode> validKeys;
+    private int attackTimes;
+    private float pickTimer;
+    private List<BlackHoleHotkey> currHotkeys;
 
-    public float pickTimer;
-
-    [SerializeField] private List<BlackHoleHotkey> currHotkeys;
-
-    public void Awake()
-    {
-        cCollider = GetComponent<CircleCollider2D>();
-    }
 
     public void SetupBlackHole(
         Vector2 _pos, 
@@ -51,7 +44,7 @@ public class BlackHoleController : MonoBehaviour
 
     private void Update()
     {
-
+        // Increase the local scale when initializing Ultimate
         if (isGrowing)
         {
             transform.localScale = Vector2.Lerp(transform.localScale, new Vector2(maxRadius+1, maxRadius+1), growthSpeed * Time.deltaTime);
@@ -61,9 +54,14 @@ public class BlackHoleController : MonoBehaviour
                 isGrowing = false;
                 pickTimer = pickTime;
             }
-        } else
+        }
+        // After the black hole achieves the maximum size, we start the timer to remain the black hole
+        else
         {
             pickTimer -= Time.deltaTime;
+
+            // If the timer is ring xD, we attack the marked enemies inside the hole
+            // Then clean the scene
             if (pickTimer < 0)
             {
                 PlayerManager.instance.player.SetTransparent(true);
@@ -73,14 +71,13 @@ public class BlackHoleController : MonoBehaviour
             }
         }
 
+        // Decrease the size of the black hole until it disappears
         if (isShrinking)
         {
             transform.localScale = Vector2.Lerp(transform.localScale, new Vector2(-.1f, -.1f), shrinkSpeed * Time.deltaTime);
 
             if (transform.localScale.x <= .1f)
-            {
                 PlayerManager.instance.player.SetTransparent(false);
-            }
 
             if (transform.localScale.x <= 0)
             {
@@ -90,6 +87,7 @@ public class BlackHoleController : MonoBehaviour
         }
     }
 
+    // Destroy all Hotkey objects
     private void DestroyAllHotkeys()
     {
         for (int i = currHotkeys.Count - 1; i >= 0; i--)
@@ -100,6 +98,7 @@ public class BlackHoleController : MonoBehaviour
         
     }
 
+    // TryAttackEnemies creates clones to attack the marked enemies
     private void TryAttackEnemies()
     {
         List<Enemy> targets = new();
@@ -125,11 +124,16 @@ public class BlackHoleController : MonoBehaviour
     {
         if (collision.TryGetComponent<Enemy>(out var e))
         {
+            // An ememy acrosses the black hole collider will be attached to a hot key
+            // The choosen hot key is randomize
             SetupHotkey(e);
+
+            // Freeze the enemy
             e.SetFreeze(true);
         }
     }
 
+    // SetupHotkey attaches a hotkey to the provided enemy (above)
     private void SetupHotkey(Enemy e)
     {
         KeyCode key = validKeys[Random.Range(0, validKeys.Count)];
