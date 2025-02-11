@@ -11,12 +11,12 @@ public class PlayerAnimationTriggers : MonoBehaviour
         player = GetComponentInParent<Player>();
     }
 
-    public void TriggerAnim()
+    private void TriggerAnim()
     {
         player.TriggerCurrentAnim();
     }
 
-    public void TriggerAttack()
+    private void TriggerAttack()
     {
         Collider2D[] colliders = Physics2D.OverlapCircleAll(player.attackCheck.position, player.attackRadius);
 
@@ -28,5 +28,10 @@ public class PlayerAnimationTriggers : MonoBehaviour
                 e.Damage();
             }
         }
+    }
+
+    private void TriggerThrowSword()
+    {
+        SkillManager.instance.throwSwordSkill.CreateSword(PlayerManager.instance.player.transform.position);
     }
 }

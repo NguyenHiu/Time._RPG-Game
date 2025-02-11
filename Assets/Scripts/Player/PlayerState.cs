@@ -23,7 +23,6 @@ public class PlayerState
 
     public virtual void Enter()
     {
-        //Debug.Log("Enter state: " + animName);
         player.anim.SetBool(animName, true);
         rb = player.rb;
         triggeredAnim = false;
@@ -39,11 +38,10 @@ public class PlayerState
 
     public virtual void Exit()
     {
-        //Debug.Log("Exist state: " + animName);
         player.anim.SetBool(animName, false);
     }
 
-    public void TriggerAnim()
+    public virtual void TriggerAnim()
     {
         triggeredAnim = true;
     }
