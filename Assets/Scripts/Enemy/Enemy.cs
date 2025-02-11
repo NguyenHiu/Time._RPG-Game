@@ -9,7 +9,6 @@ public class Enemy : Entity
     [Header("Move info")]
     public float moveSpeed;
     public float idleTime;
-    private float defaultMoveSpeed;
 
     [Header("Battle info")]
     [SerializeField] protected LayerMask whatIsPlayer;
@@ -18,12 +17,11 @@ public class Enemy : Entity
     public float battleTime;
     public float battleRange;
     public float battleSpeed;
-    private float defaultBattleSpeed;
 
     [Header("Attack info")]
     public float attackRange;
     public float attackCooldown;
-    public float lastTimeAttack;
+    [HideInInspector] public float lastTimeAttack;
     [SerializeField] protected GameObject counterArea;
     protected bool canBeStunned;
 
@@ -41,8 +39,6 @@ public class Enemy : Entity
     protected override void Start()
     {
         base.Start();
-        defaultMoveSpeed = moveSpeed;
-        defaultBattleSpeed = battleSpeed;
     }
 
     protected override void Update()
@@ -52,39 +48,16 @@ public class Enemy : Entity
         stateMachine.currentState.Update();
     }
 
-    private void SetFreeze(bool isFreezed)
-    {
-        if (isFreezed)
-        {
-            moveSpeed = 0;
-            battleSpeed = 0;
-            anim.speed = 0;
-        } else
-        {
-            moveSpeed = defaultMoveSpeed;
-            battleSpeed = defaultBattleSpeed;
-            anim.speed = 1;
-        }
-    }
-
-    public IEnumerator SetFreezeFor(float _seconds)
-    {
-        SetFreeze(true);
-        yield return new WaitForSeconds(_seconds);
-        SetFreeze(false);
-    }
-
-
     #region Collision Checks
     public virtual RaycastHit2D IsPlayerDetected()
     {
-        RaycastHit2D forward = Physics2D.Raycast(wallCheck.position, facingDir * Vector2.right, detectPlayerForwardDistance, whatIsPlayer);
+        RaycastHit2D forward = Physics2D.Raycast(wallCheck.position, new Vector2(facingDir, 0), detectPlayerForwardDistance, whatIsPlayer);
         if (forward)
         {
             return forward;
         }
 
-        RaycastHit2D behind = Physics2D.Raycast(wallCheck.position, -facingDir * Vector2.right, detectPlayerBehindDistance, whatIsPlayer);
+        RaycastHit2D behind = Physics2D.Raycast(wallCheck.position, new Vector2(-facingDir, 0), detectPlayerBehindDistance, whatIsPlayer);
         return behind;
     }
 
@@ -93,8 +66,8 @@ public class Enemy : Entity
         base.OnDrawGizmos();
 
         Gizmos.color = Color.yellow;
-        Gizmos.DrawLine(wallCheck.position, new Vector3(wallCheck.position.x + detectPlayerForwardDistance, wallCheck.position.y));
-        Gizmos.DrawLine(wallCheck.position, new Vector3(wallCheck.position.x - detectPlayerBehindDistance, wallCheck.position.y));
+        Gizmos.DrawLine(wallCheck.position, new Vector3(wallCheck.position.x + facingDir * detectPlayerForwardDistance, wallCheck.position.y));
+        Gizmos.DrawLine(wallCheck.position, new Vector3(wallCheck.position.x - facingDir * detectPlayerBehindDistance, wallCheck.position.y));
     }
     #endregion
 

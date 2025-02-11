@@ -7,7 +7,6 @@ public class Player : Entity
     [Header("Attack info")]
     public Vector2[] attackMovements;
     public bool isBusy {  get; private set; }
-    public float swordReturnedImpact;
 
     [Header("Counter attack info")]
     public float counterAttackDuration;
@@ -17,11 +16,11 @@ public class Player : Entity
     public float jumpForce = 12f;
 
     [Header("Dash info")]
+    [SerializeField] private float dashCooldown;
     public float dashDir;
+    private float dashTimer;
     public float dashSpeed = 25f;
     public float dashDuration = 0.2f;
-
-    public GameObject sword;
 
     #region States
     public PlayerStateMachine stateMachine {  get; private set; }
@@ -30,12 +29,10 @@ public class Player : Entity
     public PlayerJumpState jumpState {  get; private set; }
     public PlayerFallState airState {  get; private set; }
     public PlayerDashState dashState { get; private set; }
-    public PlayerWallSliceState wallSliceState { get; private set; }
-    public PlayerWallJumpState wallJumpState { get; private set; }
-    public PlayerPrimaryAttackState primaryAttackState { get; private set; }
-    public PlayerCounterAttackState counterAttackState { get; private set; }
-    public PlayerAimSwordState aimSwordState { get; private set; }
-    public PlayerCatchSwordState catchSwordState { get; private set; }
+    public PlayerWallSliceState wallSlice { get; private set; }
+    public PlayerWallJumpState wallJump { get; private set; }
+    public PlayerPrimaryAttackState primaryAttack { get; private set; }
+    public PlayerCounterAttackState counterAttack { get; private set; }
     #endregion
 
     protected override void Awake()
@@ -47,12 +44,10 @@ public class Player : Entity
         jumpState = new PlayerJumpState(this, stateMachine, "Jump");
         airState = new PlayerFallState(this, stateMachine, "Jump");
         dashState = new PlayerDashState(this, stateMachine, "Dash");
-        wallSliceState = new PlayerWallSliceState(this, stateMachine, "WallSlice");
-        wallJumpState = new PlayerWallJumpState(this, stateMachine, "Jump");
-        primaryAttackState = new PlayerPrimaryAttackState(this, stateMachine, "Attack");
-        counterAttackState = new PlayerCounterAttackState(this, stateMachine, "CounterAttack");
-        aimSwordState = new PlayerAimSwordState(this, stateMachine, "AimSword");
-        catchSwordState = new PlayerCatchSwordState(this, stateMachine, "CatchSword");
+        wallSlice = new PlayerWallSliceState(this, stateMachine, "WallSlice");
+        wallJump = new PlayerWallJumpState(this, stateMachine, "Jump");
+        primaryAttack = new PlayerPrimaryAttackState(this, stateMachine, "Attack");
+        counterAttack = new PlayerCounterAttackState(this, stateMachine, "CounterAttack");
     }
 
     protected override void Start()
@@ -68,28 +63,20 @@ public class Player : Entity
         CheckDashState();
     }
 
-    public void AssignNewSword(GameObject _sword)
-    {
-        sword = _sword;
-    }
-
-    public void ClearTheSword()
-    {
-        stateMachine.ChangeState(catchSwordState);
-        Destroy(sword);
-    }
-
     public void CheckDashState()
     {
 
         dashDir = Input.GetAxisRaw("Horizontal");
         if (dashDir == 0)
-            dashDir = facingDir;
-        
-        if (IsWallDetected()) return;
-
-        if (Input.GetKeyDown(KeyCode.LeftShift) && SkillManager.instance.dashSkill.CanUseSkill())
         {
+            dashDir = facingDir;
+        }
+        dashTimer -= Time.deltaTime;
+        
+        if (IsWallDetected()) { return; }
+        if (Input.GetKeyDown(KeyCode.LeftShift) && dashTimer < 0)
+        {
+            dashTimer = dashCooldown;
             stateMachine.ChangeState(dashState);
         }
     }
