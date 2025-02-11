@@ -116,7 +116,11 @@ public class ThrowSwordController : MonoBehaviour
 
         TryReturn();
         TryBounce();
+        TrySpin();
+    }
 
+    private void TrySpin()
+    {
         if (isSpinning)
         {
             // Prevent to go out the max distance
