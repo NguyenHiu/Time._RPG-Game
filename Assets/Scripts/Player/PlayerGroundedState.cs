@@ -34,30 +34,12 @@ public class PlayerGroundedState : PlayerState
 
         if (Input.GetKeyDown(KeyCode.Mouse0) && player.IsGroundDetected())
         {
-            stateMachine.ChangeState(player.primaryAttackState);
+            stateMachine.ChangeState(player.primaryAttack);
         }
 
         if (Input.GetKeyDown(KeyCode.E))
         {
-            stateMachine.ChangeState(player.counterAttackState);
+            stateMachine.ChangeState(player.counterAttack);
         }
-
-        if (Input.GetKeyDown(KeyCode.Mouse1) && TryCreateSword() && !player.isBusy)
-        {
-            stateMachine.ChangeState(player.aimSwordState);
-        }
-    }
-
-    // TryCreateSword returns true if player can create new sword
-    //                returns false and retrieves the existing sword if it exists
-    private bool TryCreateSword()
-    {
-        // If the sword has already existed
-        if (player.sword == null)
-            return true;
-
-        // Retrieve the existing sword
-        player.sword.GetComponent<ThrowSwordController>().ReturnToPlayer();
-        return false;
     }
 }

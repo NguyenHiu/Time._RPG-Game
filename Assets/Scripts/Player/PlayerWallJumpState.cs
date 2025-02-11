@@ -38,7 +38,7 @@ public class PlayerWallJumpState : PlayerState
 
         if (player.IsWallDetected())
         {
-            stateMachine.ChangeState(player.wallSliceState);
+            stateMachine.ChangeState(player.wallSlice);
         }
     }
 }
