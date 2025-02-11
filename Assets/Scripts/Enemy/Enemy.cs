@@ -52,7 +52,7 @@ public class Enemy : Entity
         stateMachine.currentState.Update();
     }
 
-    private void SetFreeze(bool isFreezed)
+    public void SetFreeze(bool isFreezed)
     {
         if (isFreezed)
         {

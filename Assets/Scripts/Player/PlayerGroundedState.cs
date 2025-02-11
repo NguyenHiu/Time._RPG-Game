@@ -24,7 +24,7 @@ public class PlayerGroundedState : PlayerState
 
         if (!player.IsGroundDetected())
         {
-            stateMachine.ChangeState(player.airState);
+            stateMachine.ChangeState(player.fallState);
         }
 
         if (Input.GetKeyDown(KeyCode.Space) && player.IsGroundDetected())
@@ -45,6 +45,11 @@ public class PlayerGroundedState : PlayerState
         if (Input.GetKeyDown(KeyCode.Mouse1) && TryCreateSword() && !player.isBusy)
         {
             stateMachine.ChangeState(player.aimSwordState);
+        }
+
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            stateMachine.ChangeState(player.blackHoleUltimateState);
         }
     }
 
