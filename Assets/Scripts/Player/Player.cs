@@ -28,7 +28,7 @@ public class Player : Entity
     public PlayerIdleState idleState {  get; private set; }
     public PlayerMoveState moveState {  get; private set; }
     public PlayerJumpState jumpState {  get; private set; }
-    public PlayerFallState airState {  get; private set; }
+    public PlayerFallState fallState {  get; private set; }
     public PlayerDashState dashState { get; private set; }
     public PlayerWallSliceState wallSliceState { get; private set; }
     public PlayerWallJumpState wallJumpState { get; private set; }
@@ -36,6 +36,7 @@ public class Player : Entity
     public PlayerCounterAttackState counterAttackState { get; private set; }
     public PlayerAimSwordState aimSwordState { get; private set; }
     public PlayerCatchSwordState catchSwordState { get; private set; }
+    public PlayerBlackHoleUltimateState blackHoleUltimateState { get; private set; }
     #endregion
 
     protected override void Awake()
@@ -45,7 +46,7 @@ public class Player : Entity
         idleState = new PlayerIdleState(this, stateMachine, "Idle");
         moveState = new PlayerMoveState(this, stateMachine, "Move");
         jumpState = new PlayerJumpState(this, stateMachine, "Jump");
-        airState = new PlayerFallState(this, stateMachine, "Jump");
+        fallState = new PlayerFallState(this, stateMachine, "Jump");
         dashState = new PlayerDashState(this, stateMachine, "Dash");
         wallSliceState = new PlayerWallSliceState(this, stateMachine, "WallSlice");
         wallJumpState = new PlayerWallJumpState(this, stateMachine, "Jump");
@@ -53,6 +54,7 @@ public class Player : Entity
         counterAttackState = new PlayerCounterAttackState(this, stateMachine, "CounterAttack");
         aimSwordState = new PlayerAimSwordState(this, stateMachine, "AimSword");
         catchSwordState = new PlayerCatchSwordState(this, stateMachine, "CatchSword");
+        blackHoleUltimateState = new PlayerBlackHoleUltimateState(this, stateMachine, "Jump");
     }
 
     protected override void Start()

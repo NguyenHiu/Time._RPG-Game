@@ -40,7 +40,7 @@ public class PlayerWallSliceState : PlayerState
         
         else if (!player.IsWallDetected())
         {
-            stateMachine.ChangeState(player.airState);
+            stateMachine.ChangeState(player.fallState);
         }
 
         if (xInput != 0 && xInput != player.facingDir)
