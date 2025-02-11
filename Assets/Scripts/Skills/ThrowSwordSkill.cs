@@ -1,13 +1,42 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+
+public enum ThrowSwordType
+{
+    Regular,
+    Bounce,
+    Pierce,
+    Spin
+};
 
 public class ThrowSwordSkill : Skill
 {
+    [Header("General")]
+    public ThrowSwordType throwType;
+    [SerializeField] float returnSpeed;
+    [SerializeField] float freezeTime;
+    [SerializeField] float destroyTime;
+
+    [Header("Bounce info")]
+    [SerializeField] private int bounceTimes;
+    [SerializeField] private float bounceSpeed;
+    [SerializeField] private float bounceGravity;
+
+    [Header("Pierce info")]
+    [SerializeField] private int pierceTimes;
+    [SerializeField] private float pierceGravity;
+
+    [Header("Spin info")]
+    [SerializeField] private float spinGravity = 2;
+    [SerializeField] private float spinMaxDistance = 7;
+    [SerializeField] private float spinTimer = 1f;
+    [SerializeField] private float hitCooldown = .35f;
+
     [Header("Skill info")]
     [SerializeField] private GameObject swordPrefab;
     [SerializeField] private Vector2 launchForce;
-    [SerializeField] private float gravityScale;
+    [SerializeField] private float defaultGravityScale;
+    private float gravityScale;
+
 
     [Header("Aim info")]
     [SerializeField] private GameObject dotPrefab;
@@ -28,10 +57,12 @@ public class ThrowSwordSkill : Skill
     {
         base.Update();
 
+        SetupGravity();
+
         if (Input.GetKey(KeyCode.Mouse1))
         {
             for (int i = 0; i < numberOfDots; i++)
-                dots[i].transform.position = DotPosition(i*dotsDistance);
+                dots[i].transform.position = DotPosition(i * dotsDistance);
         }
 
         if (Input.GetKeyUp(KeyCode.Mouse1))
@@ -41,16 +72,46 @@ public class ThrowSwordSkill : Skill
         }
     }
 
+    // SetupGravity is used to setup the gravity based on the throw type
+    private void SetupGravity()
+    {
+        switch (throwType)
+        {
+            case ThrowSwordType.Bounce:
+                gravityScale = bounceGravity;
+                break;
+            case ThrowSwordType.Pierce:
+                gravityScale = pierceGravity;
+                break;
+            case ThrowSwordType.Spin:
+                gravityScale = spinGravity;
+                break;
+            default:
+                gravityScale = defaultGravityScale;
+                break;
+        }
+    }
+
     // CreateSword creates a new instance of Sword at the provided position and custom launch direction
     public void CreateSword(Vector2 _pos)
     {
         GameObject newSword = Instantiate(swordPrefab);
-        newSword.GetComponent<ThrowSwordController>().SetupSword(_pos, finalForce, gravityScale);
+        ThrowSwordController ctrl = newSword.GetComponent<ThrowSwordController>();
+
+        // If the throw type is bounce, setup the bounce info
+        if (throwType == ThrowSwordType.Bounce)
+            ctrl.SetupBounce(true, bounceTimes, bounceSpeed);
+        else if (throwType == ThrowSwordType.Pierce)
+            ctrl.SetupPierce(pierceTimes);
+        else if (throwType == ThrowSwordType.Spin)
+            ctrl.SetupSpin(spinMaxDistance, spinTimer, hitCooldown);
+
+        ctrl.SetupSword(_pos, finalForce, gravityScale, returnSpeed, freezeTime, destroyTime);
         PlayerManager.instance.player.AssignNewSword(newSword);
     }
 
     // DotsActive sets active status of the aim curve
-    public void DotsActive(bool _status) 
+    public void DotsActive(bool _status)
     {
         aimCurve.SetActive(_status);
     }

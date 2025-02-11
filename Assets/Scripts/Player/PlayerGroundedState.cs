@@ -42,7 +42,7 @@ public class PlayerGroundedState : PlayerState
             stateMachine.ChangeState(player.counterAttackState);
         }
 
-        if (Input.GetKeyDown(KeyCode.Mouse1) && TryCreateSword())
+        if (Input.GetKeyDown(KeyCode.Mouse1) && TryCreateSword() && !player.isBusy)
         {
             stateMachine.ChangeState(player.aimSwordState);
         }
