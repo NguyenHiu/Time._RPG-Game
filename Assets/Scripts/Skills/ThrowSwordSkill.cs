@@ -1,13 +1,28 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+
+public enum ThrowSwordType
+{
+    Regular,
+    Bounce,
+    Pierce,
+    Spin
+};
 
 public class ThrowSwordSkill : Skill
 {
+    [Header("Throw Type")]
+    public ThrowSwordType throwType;
+
+    [Header("Bounce info")]
+    [SerializeField] private int bounceTimes;
+    [SerializeField] private float bounceGravity;
+
     [Header("Skill info")]
     [SerializeField] private GameObject swordPrefab;
     [SerializeField] private Vector2 launchForce;
-    [SerializeField] private float gravityScale;
+    [SerializeField] private float defaultGravityScale;
+    private float gravityScale;
+
 
     [Header("Aim info")]
     [SerializeField] private GameObject dotPrefab;
@@ -31,7 +46,7 @@ public class ThrowSwordSkill : Skill
         if (Input.GetKey(KeyCode.Mouse1))
         {
             for (int i = 0; i < numberOfDots; i++)
-                dots[i].transform.position = DotPosition(i*dotsDistance);
+                dots[i].transform.position = DotPosition(i * dotsDistance);
         }
 
         if (Input.GetKeyUp(KeyCode.Mouse1))
@@ -44,13 +59,25 @@ public class ThrowSwordSkill : Skill
     // CreateSword creates a new instance of Sword at the provided position and custom launch direction
     public void CreateSword(Vector2 _pos)
     {
+        // Set the intial gravity scale to the default value
+        gravityScale = defaultGravityScale;
+
         GameObject newSword = Instantiate(swordPrefab);
-        newSword.GetComponent<ThrowSwordController>().SetupSword(_pos, finalForce, gravityScale);
+        ThrowSwordController ctrl = newSword.GetComponent<ThrowSwordController>();
+
+        // If the throw type is bounce, setup the bounce info
+        if (throwType == ThrowSwordType.Bounce)
+        {
+            gravityScale = bounceGravity;
+            ctrl.SetupBounce(true, bounceTimes);
+        }
+
+        ctrl.SetupSword(_pos, finalForce, gravityScale);
         PlayerManager.instance.player.AssignNewSword(newSword);
     }
 
     // DotsActive sets active status of the aim curve
-    public void DotsActive(bool _status) 
+    public void DotsActive(bool _status)
     {
         aimCurve.SetActive(_status);
     }

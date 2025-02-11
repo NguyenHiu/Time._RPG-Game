@@ -16,18 +16,19 @@ public class ThrowSwordController : MonoBehaviour
     private Rigidbody2D rb;
     private Animator anim;
     private CircleCollider2D cCollider;
+
     private bool canRotate = true;
 
     [Header("Return info")]
     [SerializeField] private float returnSpeed = 12;
     private bool isReturning = false;
 
-    [Header("Bound info")]
-    [SerializeField] private bool isBounding = true;
-    [SerializeField] private float boundRadius = 10;
-    [SerializeField] private int boundTimes = 4;
-    [SerializeField] private float boundSpeed = 20;
-    private List<Transform> boundTargets = new List<Transform>();
+    [Header("Bounce info")]
+    [SerializeField] private float bounceSpeed = 20;
+    [SerializeField] private float bounceRadius = 10;
+    private List<Transform> boundTargets = new();
+    private bool isBouncing;
+    private int bounceTimes;
     private int currentTarget = 0;
 
     private void Awake()
@@ -47,6 +48,13 @@ public class ThrowSwordController : MonoBehaviour
         anim.SetBool("Rotation", true);
     }
 
+    // SetupBounce is used to setup bounce info 
+    public void SetupBounce(bool _isBouncing, int _bounceTimes)
+    {
+        isBouncing = _isBouncing;
+        bounceTimes = _bounceTimes;
+    }
+
     public void Update()
     {
         if (canRotate)
@@ -63,26 +71,31 @@ public class ThrowSwordController : MonoBehaviour
                 PlayerManager.instance.player.ClearTheSword();
         }
 
-        if (isBounding && boundTargets.Count > 0)
+        TryBounce();
+    }
+
+    private void TryBounce()
+    {
+        if (!isBouncing || boundTargets.Count <= 0)
+            return;
+
+        // If the boundTargets contains only one enemy
+        // Then this enemy may takes more than 1 times damage even there
+        //          is only `one` bound (read the following code to understand more)
+        Vector2 nextTarget = boundTargets[currentTarget].position;
+        transform.position = Vector2.MoveTowards(transform.position, nextTarget, Time.deltaTime * bounceSpeed);
+        if (Vector2.Distance(transform.position, nextTarget) < .1f)
         {
-            // If the boundTargets contains only one enemy
-            // Then this enemy may takes more than 1 times damage even there
-            //          is only `one` bound (read the following code to understand more)
-            Vector2 nextTarget = boundTargets[currentTarget].position;
-            transform.position = Vector2.MoveTowards(transform.position, nextTarget, Time.deltaTime * boundSpeed);
-            if (Vector2.Distance(transform.position, nextTarget) < .1f)
+            currentTarget++;
+            bounceTimes--;
+            if (bounceTimes <= 0)
             {
-                currentTarget++;
-                boundTimes--;
-                if (boundTimes <= 0)
-                {
-                    // Are u sure about setting isBound to false?
-                    isBounding = false;
-                    ReturnToPlayer();
-                }
-                else if (currentTarget == boundTargets.Count)
-                    currentTarget = 0;
+                // Are u sure about setting isBound to false?
+                isBouncing = false;
+                ReturnToPlayer();
             }
+            else if (currentTarget == boundTargets.Count)
+                currentTarget = 0;
         }
     }
 
@@ -92,9 +105,9 @@ public class ThrowSwordController : MonoBehaviour
         if (isReturning)
             return;
 
-        if (isBounding)
+        if (isBouncing)
         {
-            Collider2D[] targets = Physics2D.OverlapCircleAll(transform.position, boundRadius);
+            Collider2D[] targets = Physics2D.OverlapCircleAll(transform.position, bounceRadius);
             foreach (Collider2D target in targets)
             {
                 if (target.TryGetComponent<Enemy>(out var e))
@@ -109,7 +122,7 @@ public class ThrowSwordController : MonoBehaviour
         // Disable the circle collider to prevent the sword to be triggered twice
         cCollider.enabled = false;
 
-        if (isBounding && boundTargets.Count > 0)
+        if (isBouncing && boundTargets.Count > 0)
             return;
 
         // Set the parent object to the collapse object to be moved along with this object
