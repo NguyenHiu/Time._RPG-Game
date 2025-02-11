@@ -10,12 +10,26 @@ public enum ThrowSwordType
 
 public class ThrowSwordSkill : Skill
 {
-    [Header("Throw Type")]
+    [Header("General")]
     public ThrowSwordType throwType;
+    [SerializeField] float returnSpeed;
+    [SerializeField] float freezeTime;
+    [SerializeField] float destroyTime;
 
     [Header("Bounce info")]
     [SerializeField] private int bounceTimes;
+    [SerializeField] private float bounceSpeed;
     [SerializeField] private float bounceGravity;
+
+    [Header("Pierce info")]
+    [SerializeField] private int pierceTimes;
+    [SerializeField] private float pierceGravity;
+
+    [Header("Spin info")]
+    [SerializeField] private float spinGravity = 2;
+    [SerializeField] private float spinMaxDistance = 7;
+    [SerializeField] private float spinTimer = 1f;
+    [SerializeField] private float hitCooldown = .35f;
 
     [Header("Skill info")]
     [SerializeField] private GameObject swordPrefab;
@@ -43,6 +57,8 @@ public class ThrowSwordSkill : Skill
     {
         base.Update();
 
+        SetupGravity();
+
         if (Input.GetKey(KeyCode.Mouse1))
         {
             for (int i = 0; i < numberOfDots; i++)
@@ -56,23 +72,41 @@ public class ThrowSwordSkill : Skill
         }
     }
 
+    // SetupGravity is used to setup the gravity based on the throw type
+    private void SetupGravity()
+    {
+        switch (throwType)
+        {
+            case ThrowSwordType.Bounce:
+                gravityScale = bounceGravity;
+                break;
+            case ThrowSwordType.Pierce:
+                gravityScale = pierceGravity;
+                break;
+            case ThrowSwordType.Spin:
+                gravityScale = spinGravity;
+                break;
+            default:
+                gravityScale = defaultGravityScale;
+                break;
+        }
+    }
+
     // CreateSword creates a new instance of Sword at the provided position and custom launch direction
     public void CreateSword(Vector2 _pos)
     {
-        // Set the intial gravity scale to the default value
-        gravityScale = defaultGravityScale;
-
         GameObject newSword = Instantiate(swordPrefab);
         ThrowSwordController ctrl = newSword.GetComponent<ThrowSwordController>();
 
         // If the throw type is bounce, setup the bounce info
         if (throwType == ThrowSwordType.Bounce)
-        {
-            gravityScale = bounceGravity;
-            ctrl.SetupBounce(true, bounceTimes);
-        }
+            ctrl.SetupBounce(true, bounceTimes, bounceSpeed);
+        else if (throwType == ThrowSwordType.Pierce)
+            ctrl.SetupPierce(pierceTimes);
+        else if (throwType == ThrowSwordType.Spin)
+            ctrl.SetupSpin(spinMaxDistance, spinTimer, hitCooldown);
 
-        ctrl.SetupSword(_pos, finalForce, gravityScale);
+        ctrl.SetupSword(_pos, finalForce, gravityScale, returnSpeed, freezeTime, destroyTime);
         PlayerManager.instance.player.AssignNewSword(newSword);
     }
 

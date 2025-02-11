@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class DashSkill : Skill
 {
+    public bool isCreateClone;
+
     protected override void Update()
     {
         base.Update();
@@ -13,7 +15,5 @@ public class DashSkill : Skill
     protected override void UseSkill()
     {
         base.UseSkill();
-
-        Debug.Log("Created cloned behind");
     }
 }
