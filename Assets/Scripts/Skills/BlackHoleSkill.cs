@@ -12,20 +12,33 @@ public class BlackHoleSkill : Skill
     [SerializeField] private float shrinkSpeed = 3f;
     [SerializeField] private float pickTime = 3f;
     [SerializeField] private int attackTimes = 4;
-    
-    public GameObject CreateBlackHole(Vector2 _pos)
+    private GameObject blackHoleObj;
+
+    public override bool CanUseSkill()
     {
+        return base.CanUseSkill();
+    }
+
+    protected override void UseSkill()
+    {
+        base.UseSkill();
+
         GameObject newBlackhole = Instantiate(blackHolePrefab);
         newBlackhole.GetComponent<BlackHoleController>().SetupBlackHole(
-            _pos, 
-            maxRadius, 
-            growthSpeed, 
-            shrinkSpeed, 
+            PlayerManager.instance.player.transform.position,
+            maxRadius,
+            growthSpeed,
+            shrinkSpeed,
             pickTime,
             validKeys,
             attackTimes
         );
-        return newBlackhole;
+        blackHoleObj = newBlackhole;
+    }
+
+    public GameObject GetBlackHoleObj()
+    {
+        return blackHoleObj;
     }
 
 }
