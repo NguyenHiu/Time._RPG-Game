@@ -47,6 +47,8 @@ public class BlackHoleController : MonoBehaviour
         // Increase the local scale when initializing Ultimate
         if (isGrowing)
         {
+            PlayerManager.instance.player.anim.speed = 0.3f;
+
             transform.localScale = Vector2.Lerp(transform.localScale, new Vector2(maxRadius+1, maxRadius+1), growthSpeed * Time.deltaTime);
 
             if (transform.localScale.x >= maxRadius)
@@ -64,7 +66,6 @@ public class BlackHoleController : MonoBehaviour
             // Then clean the scene
             if (pickTimer < 0)
             {
-                PlayerManager.instance.player.SetTransparent(true);
                 TryAttackEnemies();
                 DestroyAllHotkeys();
                 isShrinking = true;
@@ -76,13 +77,12 @@ public class BlackHoleController : MonoBehaviour
         {
             transform.localScale = Vector2.Lerp(transform.localScale, new Vector2(-.1f, -.1f), shrinkSpeed * Time.deltaTime);
 
-            if (transform.localScale.x <= .1f)
-                PlayerManager.instance.player.SetTransparent(false);
-
-            if (transform.localScale.x <= 0)
+            if (transform.localScale.x <= 1f)
             {
+                PlayerManager.instance.player.anim.speed = 1f;
                 isShrinking = false;
                 Destroy(gameObject);
+                PlayerManager.instance.player.SetTransparent(false);
             }
         }
     }
@@ -108,6 +108,9 @@ public class BlackHoleController : MonoBehaviour
             if (hk.isPressed)
                 targets.Add(hk.belongTo);
         }
+
+        if (targets.Count > 0)
+            PlayerManager.instance.player.SetTransparent(true);
 
         while (targets.Count > 0 && attackTimes > 0)
         {
