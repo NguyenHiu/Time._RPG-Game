@@ -20,5 +20,12 @@ public class CloneSkill : Skill
         GameObject newClone = Instantiate(clonePrefab);
         CloneSkillController controller = newClone.GetComponent<CloneSkillController>();
         controller.SetupClone(clonePos, cloneDuration, canAttack);
+    public IEnumerator CreateCloneInCounter(Vector2 clonePos)
+    {
+        if (createCloneInCounter)
+        {
+            yield return new WaitForSeconds(.1f);
+            CreateClone(clonePos);
+        }
     }
 }
