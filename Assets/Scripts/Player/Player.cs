@@ -67,6 +67,11 @@ public class Player : Entity
         base.Update();
         stateMachine.currentState.Update();
         CheckDashState();
+
+        if (Input.GetKeyDown(KeyCode.F))
+        {
+            SkillManager.instance.crystalSkill.CanUseSkill();
+        }
     }
 
     public void AssignNewSword(GameObject _sword)
