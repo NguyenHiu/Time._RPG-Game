@@ -56,22 +56,7 @@ public class CloneSkillController : MonoBehaviour
 
     private void FacingClosestTarget()
     {
-        Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, 25);
-
-        float closestDistance = Mathf.Infinity;
-        Transform closestTarget = null;
-        foreach (var obj in colliders)
-        {
-            if (obj.TryGetComponent<Enemy>(out var e))
-            {
-                float distance = Vector2.Distance(e.transform.position, transform.position);
-                if (distance < closestDistance)
-                {
-                    closestDistance = distance;
-                    closestTarget = e.transform;
-                }
-            }
-        }
+        Transform closestTarget = SkillManager.instance.cloneSkill.GetTheClosestEnemy(transform.position);
 
         if (closestTarget != null)
         {
