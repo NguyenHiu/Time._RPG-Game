@@ -1,5 +1,17 @@
 using UnityEngine;
 
+/*
+ * -- Throw Sword Skill --
+ * 
+ * This skill includes several types of throwing, such as:
+ *      + A normal curve,
+ *      + A bouncing sword,
+ *      + A fast pierce, or
+ *      + Spinning the sword to gain heavy damage on the enemy.
+ *      
+ */
+
+
 public enum ThrowSwordType
 {
     Regular,

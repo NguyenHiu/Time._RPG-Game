@@ -1,12 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
 public class BlackHoleHotkey : MonoBehaviour
 {
-    public bool isPressed {  get; private set; }
-    public Enemy belongTo {  get; private set; }
+    public bool isPressed { get; private set; }
+    public Enemy belongTo { get; private set; }
     private TextMeshProUGUI text;
     private KeyCode key;
 

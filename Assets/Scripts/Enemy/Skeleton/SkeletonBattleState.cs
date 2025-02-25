@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class SkeletonBattleState : EnemyState
@@ -42,8 +40,9 @@ public class SkeletonBattleState : EnemyState
             {
                 stateMachine.ChangeState(enemy.attackState);
                 return;
-            } 
-        } else
+            }
+        }
+        else
         {
             if (stateTimer < 0 || Vector2.Distance(enemy.transform.position, playerTransform.position) > enemy.battleRange)
             {
@@ -55,7 +54,8 @@ public class SkeletonBattleState : EnemyState
         if (playerTransform.position.x > enemy.rb.position.x)
         {
             moveDir = 1;
-        } else
+        }
+        else
         {
             moveDir = -1;
         }

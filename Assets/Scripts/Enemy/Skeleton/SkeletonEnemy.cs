@@ -1,12 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class SkeletonEnemy : Enemy
 {
 
     #region States
-    public SkeletonIdleState idleState {  get; private set; }
+    public SkeletonIdleState idleState { get; private set; }
     public SkeletonMoveState moveState { get; private set; }
     public SkeletonBattleState battleState { get; private set; }
     public SkeletonAttackState attackState { get; private set; }
@@ -42,10 +40,10 @@ public class SkeletonEnemy : Enemy
 
         Gizmos.color = Color.red;
         Gizmos.DrawLine(transform.position, new Vector3(transform.position.x + facingDir * attackRange, transform.position.y));
-        
+
         Gizmos.color = Color.green;
         Gizmos.DrawLine(
-            new Vector3(transform.position.x - battleRange, transform.position.y - 0.2f), 
+            new Vector3(transform.position.x - battleRange, transform.position.y - 0.2f),
             new Vector3(transform.position.x + battleRange, transform.position.y - 0.2f)
         );
     }

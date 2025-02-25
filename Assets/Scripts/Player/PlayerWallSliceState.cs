@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class PlayerWallSliceState : PlayerState
@@ -23,7 +20,7 @@ public class PlayerWallSliceState : PlayerState
     {
         base.Update();
 
-        
+
         if (yInput < 0)
         {
             player.rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y);
@@ -36,8 +33,8 @@ public class PlayerWallSliceState : PlayerState
         if (player.IsGroundDetected())
         {
             stateMachine.ChangeState(player.idleState);
-        } 
-        
+        }
+
         else if (!player.IsWallDetected())
         {
             stateMachine.ChangeState(player.fallState);

@@ -1,6 +1,13 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+
+/*
+ *  -- Clone Skill --
+ * 
+ * When triggered, this skill will create a clone of the player at the position where the skill is triggered.
+ * This clone can attack any enemy inside the attack range. The clone can also switch sides if it detects an enemy
+ * on the other side.
+ * 
+ */
 
 public class CloneSkill : Skill
 {

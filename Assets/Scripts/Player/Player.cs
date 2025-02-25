@@ -1,12 +1,11 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Player : Entity
 {
     [Header("Attack info")]
     public Vector2[] attackMovements;
-    public bool isBusy {  get; private set; }
+    public bool isBusy { get; private set; }
     public float swordReturnedImpact;
 
     [Header("Counter attack info")]
@@ -24,11 +23,11 @@ public class Player : Entity
     public GameObject sword;
 
     #region States
-    public PlayerStateMachine stateMachine {  get; private set; }
-    public PlayerIdleState idleState {  get; private set; }
-    public PlayerMoveState moveState {  get; private set; }
-    public PlayerJumpState jumpState {  get; private set; }
-    public PlayerFallState fallState {  get; private set; }
+    public PlayerStateMachine stateMachine { get; private set; }
+    public PlayerIdleState idleState { get; private set; }
+    public PlayerMoveState moveState { get; private set; }
+    public PlayerJumpState jumpState { get; private set; }
+    public PlayerFallState fallState { get; private set; }
     public PlayerDashState dashState { get; private set; }
     public PlayerWallSliceState wallSliceState { get; private set; }
     public PlayerWallJumpState wallJumpState { get; private set; }
@@ -87,7 +86,7 @@ public class Player : Entity
         dashDir = Input.GetAxisRaw("Horizontal");
         if (dashDir == 0)
             dashDir = facingDir;
-        
+
         if (IsWallDetected()) return;
 
         if (Input.GetKeyDown(KeyCode.LeftShift) && SkillManager.instance.dashSkill.CanUseSkill())

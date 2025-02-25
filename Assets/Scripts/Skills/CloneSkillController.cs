@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class CloneSkillController : MonoBehaviour
@@ -42,7 +40,7 @@ public class CloneSkillController : MonoBehaviour
     // TriggerAnim() and TriggerAttack() are used in Attack Animation
     public void TriggerAnim()
     {
-        
+
     }
 
     public void TriggerAttack()
@@ -71,7 +69,7 @@ public class CloneSkillController : MonoBehaviour
                 {
                     closestDistance = distance;
                     closestTarget = e.transform;
-                } 
+                }
             }
         }
 
@@ -79,7 +77,7 @@ public class CloneSkillController : MonoBehaviour
         {
             // Right is the default facing direction of the sprite
             // So if the target is on the left of the sprite, we rotate the facing direction!
-            if (closestTarget.position.x*facingDir < transform.position.x*facingDir)
+            if (closestTarget.position.x * facingDir < transform.position.x * facingDir)
             {
                 transform.Rotate(0, 180, 0);
                 facingDir *= -1;

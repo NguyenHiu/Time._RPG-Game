@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -62,11 +61,11 @@ public class ThrowSwordController : MonoBehaviour
 
     // The launchForce param has already calculated based on the pointer position 
     public void SetupSword(
-            Vector2 _pos, 
-            Vector2 launchForce, 
-            float _gravityScale, 
-            float _returnSpeed, 
-            float _freezeTime,  
+            Vector2 _pos,
+            Vector2 launchForce,
+            float _gravityScale,
+            float _returnSpeed,
+            float _freezeTime,
             float _destroyTime
     )
     {
@@ -166,7 +165,7 @@ public class ThrowSwordController : MonoBehaviour
     {
         enemy.Damage();
         enemy.StartCoroutine("SetFreezeFor", freezeTime);
-    } 
+    }
 
     private void TryReturn()
     {
@@ -197,7 +196,7 @@ public class ThrowSwordController : MonoBehaviour
         {
             if (currTargetTransform.TryGetComponent<Enemy>(out var e))
                 FreezeDamage(e);
-            
+
             currentTarget++;
             bounceTimes--;
             if (bounceTimes <= 0)
@@ -217,7 +216,7 @@ public class ThrowSwordController : MonoBehaviour
         if (isReturning)
             return;
 
-        bool isHitEnemy= collision.TryGetComponent<Enemy>(out Enemy _enemy);
+        bool isHitEnemy = collision.TryGetComponent<Enemy>(out Enemy _enemy);
 
         // Get bounce targets within the circle defined by bounceRadius
         if (isBouncing)
@@ -262,7 +261,7 @@ public class ThrowSwordController : MonoBehaviour
     private void StuckInto(Collider2D collision)
     {
         // TODO: check if the else is the same as the if statement
-        if (!isSpinning) 
+        if (!isSpinning)
             StopTheSword(RigidbodyConstraints2D.FreezeAll);
         else StopTheSword(RigidbodyConstraints2D.FreezePosition);
 

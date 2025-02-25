@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerPrimaryAttackState : PlayerState
@@ -18,7 +16,7 @@ public class PlayerPrimaryAttackState : PlayerState
         base.Enter();
 
         stateTimer = .1f;
-        
+
         if (comboCounter >= maxCombo || Time.time > lastComboTime + comboStreakTime)
         {
             comboCounter = 0;
@@ -41,7 +39,8 @@ public class PlayerPrimaryAttackState : PlayerState
     {
         base.Update();
 
-        if (stateTimer < 0) {
+        if (stateTimer < 0)
+        {
             player.SetZeroVelocity();
         }
 

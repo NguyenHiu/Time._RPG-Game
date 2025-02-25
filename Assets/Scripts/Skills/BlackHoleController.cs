@@ -1,7 +1,4 @@
-using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel.Design;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class BlackHoleController : MonoBehaviour
@@ -21,7 +18,7 @@ public class BlackHoleController : MonoBehaviour
 
 
     public void SetupBlackHole(
-        Vector2 _pos, 
+        Vector2 _pos,
         float _maxRadius,
         float _growthSpeed,
         float _shrinkSpeed,
@@ -49,7 +46,7 @@ public class BlackHoleController : MonoBehaviour
         {
             PlayerManager.instance.player.anim.speed = 0.3f;
 
-            transform.localScale = Vector2.Lerp(transform.localScale, new Vector2(maxRadius+1, maxRadius+1), growthSpeed * Time.deltaTime);
+            transform.localScale = Vector2.Lerp(transform.localScale, new Vector2(maxRadius + 1, maxRadius + 1), growthSpeed * Time.deltaTime);
 
             if (transform.localScale.x >= maxRadius)
             {
@@ -95,7 +92,7 @@ public class BlackHoleController : MonoBehaviour
             Destroy(currHotkeys[i].gameObject);
             currHotkeys.RemoveAt(i);
         }
-        
+
     }
 
     // TryAttackEnemies creates clones to attack the marked enemies

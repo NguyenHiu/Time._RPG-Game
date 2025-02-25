@@ -1,10 +1,9 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Enemy : Entity
 {
-    public EnemyStateMachine stateMachine {  get; private set; }
+    public EnemyStateMachine stateMachine { get; private set; }
 
     [Header("Move info")]
     public float moveSpeed;
@@ -59,7 +58,8 @@ public class Enemy : Entity
             moveSpeed = 0;
             battleSpeed = 0;
             anim.speed = 0;
-        } else
+        }
+        else
         {
             moveSpeed = defaultMoveSpeed;
             battleSpeed = defaultBattleSpeed;
