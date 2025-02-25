@@ -34,7 +34,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: IsExploded
+    m_ConditionEvent: Explode
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 4381953708370282728}
@@ -86,8 +86,8 @@ AnimatorController:
   m_Name: Crystal_AC
   serializedVersion: 5
   m_AnimatorParameters:
-  - m_Name: IsExploded
-    m_Type: 4
+  - m_Name: Explode
+    m_Type: 9
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
