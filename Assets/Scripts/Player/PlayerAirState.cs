@@ -24,7 +24,7 @@ public class PlayerAirState : PlayerState
 
             if (player.IsWallDetected())
             {
-                stateMachine.ChangeState(player.wallSlice);
+                stateMachine.ChangeState(player.wallSliceState);
             }
         }
     }

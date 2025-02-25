@@ -47,7 +47,7 @@ public class PlayerWallSliceState : PlayerState
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            stateMachine.ChangeState(player.wallJump);
+            stateMachine.ChangeState(player.wallJumpState);
         }
 
     }

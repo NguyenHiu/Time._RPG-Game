@@ -7,6 +7,8 @@ public class PlayerDashState : PlayerState
     public override void Enter()
     {
         base.Enter();
+        if (SkillManager.instance.dashSkill.isCreateClone)
+            SkillManager.instance.cloneSkill.CreateClone(player.transform.position);
         stateTimer = player.dashDuration;
     }
 
@@ -26,7 +28,7 @@ public class PlayerDashState : PlayerState
         }
         if (player.IsWallDetected())
         {
-            stateMachine.ChangeState(player.wallSlice);
+            stateMachine.ChangeState(player.wallSliceState);
         }
 
     }
