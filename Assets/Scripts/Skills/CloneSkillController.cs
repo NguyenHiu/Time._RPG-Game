@@ -6,6 +6,8 @@ public class CloneSkillController : MonoBehaviour
     [SerializeField] private float cloneTimer;
     [SerializeField] private Transform attackCheck;
     [SerializeField] private float attackRadius = .8f;
+    private bool canCreateAnotherClone;
+    private float chanceToCreateAnotherClone;
     private int facingDir;
     private SpriteRenderer sr;
     private Animator anim;
@@ -29,12 +31,14 @@ public class CloneSkillController : MonoBehaviour
         FacingClosestTarget();
     }
 
-    public void SetupClone(Vector2 _pos, float _cloneDuration, bool _canAttack)
+    public void SetupClone(Vector2 _pos, float _cloneDuration, bool _canAttack, bool _canCreateAnotherClone, float _chanceToCreateAnotherClone)
     {
         transform.position = _pos;
         cloneTimer = _cloneDuration;
         if (_canAttack)
             anim.SetInteger("AttackCounter", Random.Range(1, 4));
+        canCreateAnotherClone = _canCreateAnotherClone;
+        chanceToCreateAnotherClone = _chanceToCreateAnotherClone;
     }
 
     // TriggerAnim() and TriggerAttack() are used in Attack Animation
@@ -51,6 +55,14 @@ public class CloneSkillController : MonoBehaviour
         {
             if (obj.TryGetComponent<Enemy>(out var e))
                 e.Damage();
+        }
+
+        // chance to create another clone
+        if (canCreateAnotherClone && Random.Range(0, 100) < chanceToCreateAnotherClone)
+        {
+            Vector2 pos = transform.position;
+            pos.x += facingDir * 1.5f;
+            SkillManager.instance.cloneSkill.CreateClone(pos);
         }
     }
 

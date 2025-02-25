@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 /*
@@ -14,12 +15,17 @@ public class CloneSkill : Skill
     [SerializeField] private GameObject clonePrefab;
     [SerializeField] private float cloneDuration;
     [SerializeField] private bool canAttack;
+    [SerializeField] private bool createCloneInCounter;
+    [SerializeField] private bool canCreateAnotherClone;
+    [SerializeField] private float chanceToCreateAnotherClone;
 
     public void CreateClone(Vector2 clonePos)
     {
         GameObject newClone = Instantiate(clonePrefab);
         CloneSkillController controller = newClone.GetComponent<CloneSkillController>();
-        controller.SetupClone(clonePos, cloneDuration, canAttack);
+        controller.SetupClone(clonePos, cloneDuration, canAttack, canCreateAnotherClone, chanceToCreateAnotherClone);
+    }
+
     public IEnumerator CreateCloneInCounter(Vector2 clonePos)
     {
         if (createCloneInCounter)
