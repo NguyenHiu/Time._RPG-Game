@@ -3,7 +3,7 @@ using UnityEngine;
 public class SkeletonBattleState : EnemyState
 {
     private SkeletonEnemy enemy;
-    private Transform playerTransform;
+    private GameObject player;
     private float moveDir;
 
     public SkeletonBattleState(Enemy _enemyBase, EnemyStateMachine _stateMachine, string _animName, SkeletonEnemy _enemy) : base(_enemyBase, _stateMachine, _animName)
@@ -15,7 +15,7 @@ public class SkeletonBattleState : EnemyState
     {
         base.Enter();
 
-        playerTransform = PlayerManager.instance.player.transform;
+        player = GameObject.Find("Player");
     }
 
     public override void Exit()
@@ -44,14 +44,14 @@ public class SkeletonBattleState : EnemyState
         }
         else
         {
-            if (stateTimer < 0 || Vector2.Distance(enemy.transform.position, playerTransform.position) > enemy.battleRange)
+            if (stateTimer < 0 || Vector2.Distance(enemy.transform.position, player.transform.position) > enemy.battleRange)
             {
                 stateMachine.ChangeState(enemy.idleState);
                 return;
             }
         }
 
-        if (playerTransform.position.x > enemy.rb.position.x)
+        if (player.transform.position.x > enemy.rb.position.x)
         {
             moveDir = 1;
         }
