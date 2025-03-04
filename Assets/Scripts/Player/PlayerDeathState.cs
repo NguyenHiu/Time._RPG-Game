@@ -11,7 +11,7 @@ public class PlayerDeathState : PlayerState
     public override void Enter()
     {
         base.Enter();
-        player.capsuleCD.enabled = false;
+        //player.capsuleCD.enabled = false;
     }
 
     public override void Exit()

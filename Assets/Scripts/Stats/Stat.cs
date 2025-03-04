@@ -19,6 +19,11 @@ public class Stat
         return finalVal;
     }
 
+    public void SetBaseValue(float val)
+    {
+        baseValue = val;
+    }
+
     public void AddModifier(float val)
     {
         modifers.Add(val);
