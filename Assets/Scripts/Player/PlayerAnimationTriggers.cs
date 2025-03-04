@@ -20,8 +20,12 @@ public class PlayerAnimationTriggers : MonoBehaviour
 
         foreach (var obj in colliders)
         {
-            Enemy e = obj.GetComponent<Enemy>();
-            if (e != null)
+            if (obj.TryGetComponent<StatsController>(out var so))
+            {
+                so.TakeDamage(player.statCtrl.damage.GetValue());
+            }
+            // Trigger the Damage() method for testing only
+            if (obj.TryGetComponent<Enemy>(out var e))
             {
                 e.Damage();
             }

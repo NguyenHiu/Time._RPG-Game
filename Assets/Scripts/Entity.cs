@@ -23,6 +23,9 @@ public class Entity : MonoBehaviour
     [SerializeField] private Vector2 knockbackDir;
     private bool isKnockback;
 
+    [Header("Status contronller")]
+    [SerializeField] public StatsController statCtrl;
+
     public int facingDir { get; private set; } = 1;
     public bool facingRight { get; private set; } = true;
 
@@ -32,6 +35,7 @@ public class Entity : MonoBehaviour
         spriteRenderer = GetComponentInChildren<SpriteRenderer>();
         rb = GetComponent<Rigidbody2D>();
         fx = GetComponent<EntityFX>();
+        statCtrl = GetComponent<StatsController>();
     }
 
     public virtual void Damage()
@@ -48,15 +52,9 @@ public class Entity : MonoBehaviour
         isKnockback = false;
     }
 
-    protected virtual void Start()
-    {
+    protected virtual void Start() { }
 
-    }
-
-    protected virtual void Update()
-    {
-
-    }
+    protected virtual void Update() { }
 
     #region Velocity
     public virtual void SetZeroVelocity()
