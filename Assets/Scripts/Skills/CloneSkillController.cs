@@ -54,7 +54,7 @@ public class CloneSkillController : MonoBehaviour
         foreach (var obj in colliders)
         {
             if (obj.TryGetComponent<Enemy>(out var e))
-                e.Damage();
+                e.DamageEffect();
         }
 
         // chance to create another clone

@@ -17,10 +17,9 @@ public class SkeletonAnimationTriggers : MonoBehaviour
 
         foreach (var obj in colliders)
         {
-            Player e = obj.GetComponent<Player>();
-            if (e != null)
+            if (obj.TryGetComponent<StatsController>(out var sc))
             {
-                e.Damage();
+                enemy.statCtrl.DoDamage(sc);
             }
         }
     }

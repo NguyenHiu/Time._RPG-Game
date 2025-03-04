@@ -4,14 +4,21 @@ using UnityEngine;
 
 public class StatsController : MonoBehaviour
 {
+    public Stat strength;
     public Stat damage;
     public Stat hp;
 
     [SerializeField] private float currentHp;
 
-    private void Start()
+    protected virtual void Start()
     {
         currentHp = hp.GetValue();
+    }
+
+    public virtual void DoDamage(StatsController ctrl)
+    {
+        float totalDamage = damage.GetValue() + strength.GetValue();
+        ctrl.TakeDamage(totalDamage);
     }
 
     public virtual void TakeDamage(float damage)
@@ -19,7 +26,7 @@ public class StatsController : MonoBehaviour
         currentHp -= damage;
         Debug.Log(gameObject.name + " HP: " + currentHp);
 
-        if (currentHp < 0)
+        if (currentHp <= 0)
         {
             Die();
         }

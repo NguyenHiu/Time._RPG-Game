@@ -72,7 +72,7 @@ public class CrystalController : MonoBehaviour
         foreach (var obj in colliders)
         {
             if (obj.TryGetComponent<Enemy>(out var e))
-                e.Damage();
+                e.DamageEffect();
         }
     }
 

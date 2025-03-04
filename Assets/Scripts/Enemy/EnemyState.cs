@@ -30,6 +30,7 @@ public class EnemyState
     public virtual void Exit()
     {
         enemyBase.anim.SetBool(animName, false);
+        enemyBase.lastState = animName;
     }
 
     public void TriggerAnim() => triggeredAnim = true;

@@ -8,6 +8,7 @@ public class Entity : MonoBehaviour
     public Rigidbody2D rb { get; private set; }
     public EntityFX fx { get; private set; }
     public SpriteRenderer spriteRenderer { get; private set; }
+    public CapsuleCollider2D capsuleCD { get; private set; }
     #endregion
 
     [Header("Collision info")]
@@ -36,13 +37,16 @@ public class Entity : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         fx = GetComponent<EntityFX>();
         statCtrl = GetComponent<StatsController>();
+        capsuleCD = GetComponent<CapsuleCollider2D>();
     }
 
-    public virtual void Damage()
+    public virtual void DamageEffect()
     {
         fx.StartCoroutine("Flash");
         StartCoroutine("Knockback");
     }
+
+    public virtual void Die() { }
 
     protected virtual IEnumerator Knockback()
     {

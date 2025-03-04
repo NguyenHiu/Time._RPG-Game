@@ -31,6 +31,8 @@ public class Enemy : Entity
     public float stunnedDuration;
     public Vector2 stunnedDir;
 
+    public string lastState;
+
     protected override void Awake()
     {
         base.Awake();

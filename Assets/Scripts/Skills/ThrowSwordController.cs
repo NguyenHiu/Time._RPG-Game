@@ -163,7 +163,7 @@ public class ThrowSwordController : MonoBehaviour
 
     private void FreezeDamage(Enemy enemy)
     {
-        enemy.Damage();
+        enemy.DamageEffect();
         enemy.StartCoroutine("SetFreezeFor", freezeTime);
     }
 

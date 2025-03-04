@@ -4,13 +4,28 @@ using UnityEngine;
 
 public class PlayerStats : StatsController
 {
+    private Player player;
+
+    protected override void Start()
+    {
+        base.Start();
+        player = GetComponent<Player>();
+    }
+
     public override void TakeDamage(float damage)
     {
         base.TakeDamage(damage);
+        player.DamageEffect();
     }
 
     protected override void Die()
     {
         base.Die();
+        player.Die();
+    }
+
+    public override void DoDamage(StatsController ctrl)
+    {
+        base.DoDamage(ctrl);
     }
 }
