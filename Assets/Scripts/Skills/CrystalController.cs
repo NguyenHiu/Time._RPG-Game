@@ -13,6 +13,8 @@ public class CrystalController : MonoBehaviour
     private float moveSpeed;
     private float duration;
     private Transform closestEnemy;
+    private float damage;
+    private bool canShock;
 
     private void Awake()
     {
@@ -21,7 +23,7 @@ public class CrystalController : MonoBehaviour
     }
 
     // Called by CrystalSkill to setup a new crystal
-    public void SetupCrystal(Vector2 _pos, bool _canExplode, float _growSpeed, bool _canMove, float _moveSpeed, float _duration, Transform _closestEnemy)
+    public void SetupCrystal(Vector2 _pos, bool _canExplode, float _growSpeed, bool _canMove, float _moveSpeed, float _duration, Transform _closestEnemy, float _damage, bool _canShock)
     {
         transform.position = _pos;
         canExplode = _canExplode;
@@ -31,6 +33,8 @@ public class CrystalController : MonoBehaviour
         duration = _duration;
         closestEnemy = _closestEnemy;
         _isGrowing = false;
+        damage = _damage;
+        canShock = _canShock;
     }
 
     private void Update()
@@ -72,7 +76,7 @@ public class CrystalController : MonoBehaviour
         foreach (var obj in colliders)
         {
             if (obj.TryGetComponent<Enemy>(out var e))
-                e.Damage();
+                PlayerManager.instance.player.statCtrl.DoLightningAttack(e.statCtrl);
         }
     }
 

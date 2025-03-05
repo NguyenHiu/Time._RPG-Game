@@ -36,6 +36,7 @@ public class Player : Entity
     public PlayerAimSwordState aimSwordState { get; private set; }
     public PlayerCatchSwordState catchSwordState { get; private set; }
     public PlayerBlackHoleUltimateState blackHoleUltimateState { get; private set; }
+    public PlayerDeathState deathState { get; private set; }
     #endregion
 
     protected override void Awake()
@@ -54,6 +55,7 @@ public class Player : Entity
         aimSwordState = new PlayerAimSwordState(this, stateMachine, "AimSword");
         catchSwordState = new PlayerCatchSwordState(this, stateMachine, "CatchSword");
         blackHoleUltimateState = new PlayerBlackHoleUltimateState(this, stateMachine, "Jump");
+        deathState = new PlayerDeathState(this, stateMachine, "Die");
     }
 
     protected override void Start()
@@ -107,5 +109,30 @@ public class Player : Entity
         isBusy = true;
         yield return new WaitForSeconds(_seconds);
         isBusy = false;
+    }
+
+    public override void Die()
+    {
+        base.Die();
+        stateMachine.ChangeState(deathState);
+    }
+
+    public override void SlowBy(float _slowPercentage, float _duration)
+    {
+        base.SlowBy(_slowPercentage, _duration);
+
+        moveSpeed *= (1 - _slowPercentage);
+        jumpForce *= (1 - _slowPercentage);
+        dashSpeed *= (1 - _slowPercentage);
+
+        StartCoroutine(CancelSlow(1 / (1 - _slowPercentage), _duration));
+    }
+
+    public override IEnumerator CancelSlow(float _restorePercentage, float _duration)
+    {
+        yield return base.CancelSlow(_restorePercentage, _duration);
+        moveSpeed *= _restorePercentage;
+        jumpForce *= _restorePercentage;
+        dashSpeed *= _restorePercentage;
     }
 }

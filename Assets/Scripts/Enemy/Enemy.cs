@@ -31,6 +31,8 @@ public class Enemy : Entity
     public float stunnedDuration;
     public Vector2 stunnedDir;
 
+    public string lastState;
+
     protected override void Awake()
     {
         base.Awake();
@@ -121,5 +123,20 @@ public class Enemy : Entity
     {
         canBeStunned = false;
         CloseCounterArea();
+    }
+
+    public override void SlowBy(float _slowPercentage, float _duration)
+    {
+        base.SlowBy(_slowPercentage, _duration);
+
+        moveSpeed *= (1 - _slowPercentage);
+
+        StartCoroutine(CancelSlow(1 / (1 - _slowPercentage), _duration));
+    }
+
+    public override IEnumerator CancelSlow(float _restorePercentage, float _duration)
+    {
+        yield return base.CancelSlow(_restorePercentage, _duration);
+        moveSpeed *= _restorePercentage;
     }
 }

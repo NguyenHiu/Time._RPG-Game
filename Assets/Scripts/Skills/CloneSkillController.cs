@@ -11,6 +11,7 @@ public class CloneSkillController : MonoBehaviour
     private int facingDir;
     private SpriteRenderer sr;
     private Animator anim;
+    private float damage;
 
     private void Awake()
     {
@@ -31,7 +32,7 @@ public class CloneSkillController : MonoBehaviour
         FacingClosestTarget();
     }
 
-    public void SetupClone(Vector2 _pos, float _cloneDuration, bool _canAttack, bool _canCreateAnotherClone, float _chanceToCreateAnotherClone)
+    public void SetupClone(Vector2 _pos, float _cloneDuration, bool _canAttack, bool _canCreateAnotherClone, float _chanceToCreateAnotherClone, float _damage)
     {
         transform.position = _pos;
         cloneTimer = _cloneDuration;
@@ -39,6 +40,7 @@ public class CloneSkillController : MonoBehaviour
             anim.SetInteger("AttackCounter", Random.Range(1, 4));
         canCreateAnotherClone = _canCreateAnotherClone;
         chanceToCreateAnotherClone = _chanceToCreateAnotherClone;
+        damage = _damage;
     }
 
     // TriggerAnim() and TriggerAttack() are used in Attack Animation
@@ -54,7 +56,11 @@ public class CloneSkillController : MonoBehaviour
         foreach (var obj in colliders)
         {
             if (obj.TryGetComponent<Enemy>(out var e))
-                e.Damage();
+            {
+                float finalDamage = PlayerManager.instance.player.statCtrl.AppliedArmor(e.statCtrl, damage);
+                if (finalDamage > 0)
+                    e.statCtrl.TakeDamage(Mathf.RoundToInt(finalDamage));
+            }
         }
 
         // chance to create another clone
