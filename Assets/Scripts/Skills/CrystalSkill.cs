@@ -19,6 +19,10 @@ public class CrystalSkill : Skill
     [SerializeField] private GameObject crystalPrefab;
     private Transform closestTarget;
 
+    [Header("Crystal Infor")]
+    [SerializeField] private float damage;
+    [SerializeField] private bool canShock;
+
     [Header("Explosive Crystal")]
     [SerializeField] private bool canExplode;
     [SerializeField] private float growSpeed;
@@ -65,7 +69,7 @@ public class CrystalSkill : Skill
 
             closestTarget = GetTheClosestEnemy(pos);
 
-            ctrl.SetupCrystal(pos, canExplode, growSpeed, canMove, moveSpeed, duration, closestTarget);
+            ctrl.SetupCrystal(pos, canExplode, growSpeed, canMove, moveSpeed, duration, closestTarget, damage, canShock);
         }
         else if (canSwap && lastCrystal && !canUseMultiCrystals)
         {

@@ -124,4 +124,20 @@ public class Enemy : Entity
         canBeStunned = false;
         CloseCounterArea();
     }
+
+    public override void SetVelocity(float _xVelocity, float _yVelocity)
+    {
+        // Reduce 20% speed while freezing
+        if (statCtrl.isChilled)
+        {
+            Debug.Log(">> " + gameObject.name + " -20% speed");
+            _xVelocity *= .8f;
+        }
+        else if (statCtrl.isShocked)
+        {
+            Debug.Log(">> " + gameObject.name + " -10% speed");
+            _xVelocity *= .9f;
+        }
+        base.SetVelocity(_xVelocity, _yVelocity);
+    }
 }

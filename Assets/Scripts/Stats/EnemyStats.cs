@@ -1,7 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
 public class EnemyStats : StatsController
 {
     private Enemy enemy;
@@ -12,10 +8,14 @@ public class EnemyStats : StatsController
         enemy = GetComponent<Enemy>();
     }
 
-    public override void TakeDamage(int damage)
+    public override void TakeDamage(int damage, bool triggerAffect = true)
+    {
+        base.TakeDamage(damage, triggerAffect);
+    }
+
+    public void TakeMagicalDamage(int damage)
     {
         base.TakeDamage(damage);
-        enemy.DamageEffect();
     }
 
     protected override void Die()

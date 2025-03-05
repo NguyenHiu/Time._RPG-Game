@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class SkeletonDeathState : EnemyState
@@ -28,7 +26,7 @@ public class SkeletonDeathState : EnemyState
     public override void Update()
     {
         base.Update();
-        if  (stateTimer > 0)
+        if (stateTimer > 0)
             enemy.rb.velocity = new Vector2(0, 10);
     }
 }

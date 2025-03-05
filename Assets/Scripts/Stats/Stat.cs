@@ -1,10 +1,8 @@
-using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting.Dependencies.Sqlite;
 using UnityEngine;
 
 [System.Serializable]
-public class Stat 
+public class Stat
 {
     [SerializeField] private float baseValue;
     [SerializeField] private List<float> modifers = new();

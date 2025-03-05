@@ -25,23 +25,28 @@ public class StatsController : MonoBehaviour
     public Stat lightningDamage;
 
     public bool isBurned = false;
-    public float burnTimer;
-    public float burnDuration = .5f;
+    private float burnTimer;
+    public float burnDuration = 1.0f;
 
     public bool isChilled = false;
-    public float chillTimer;
+    private float chillTimer;
     public float chillDuration = 1.0f;
 
     public bool isShocked = false;
-    public float shockTimer;
+    private float shockTimer;
     public float shockDuration = 1.0f;
 
     [SerializeField] private float currentHp;
+    public System.Action onHealthChanged;
+    public EntityFX entityFX;
+    private Entity entity;
 
     protected virtual void Start()
     {
-        currentHp = maxHP.GetValue();
         critPower.SetBaseValue(150); // default 150% of the total damage
+        currentHp = GetTotalMaxHealth();
+        entityFX = GetComponent<EntityFX>();
+        entity = GetComponent<Entity>();
     }
 
     protected virtual void Update()
@@ -68,11 +73,86 @@ public class StatsController : MonoBehaviour
         }
     }
 
+    // GetTotalHealth returns the total health value, including max HP and vitality points
+    public virtual int GetTotalMaxHealth()
+    {
+        return Mathf.RoundToInt(maxHP.GetValue() + vitality.GetValue() * 5);
+    }
+
+    // GetCurrentHealth returns the current health value
+    public virtual int GetCurrentHealth()
+    {
+        return Mathf.RoundToInt(currentHp);
+    }
+
+    // Magical Attacks
+    public virtual void DoFireAttack(StatsController ctrl)
+    {
+        // Update Fire Data
+        ctrl.isBurned = true;
+        ctrl.burnTimer = burnDuration;
+
+        float finalDamage = AppliedMagicResistance(ctrl, fireDamage.GetValue());
+        ctrl.TakeDamage(Mathf.RoundToInt(finalDamage));
+
+        // Apply FX
+        ctrl.entityFX.StartCoroutine("Burning", ctrl.burnTimer);
+    }
+
+    public virtual void DoIceAttack(StatsController ctrl)
+    {
+        // Update Freezing Data
+        ctrl.isChilled = true;
+        ctrl.chillTimer = chillDuration;
+
+        float finalDamage = AppliedMagicResistance(ctrl, iceDamage.GetValue());
+        ctrl.TakeDamage(Mathf.RoundToInt(finalDamage));
+
+        // Apply FX
+        ctrl.entityFX.StartCoroutine("Freezing", ctrl.chillTimer);
+    }
+
+    public virtual void DoLightningAttack(StatsController ctrl)
+    {
+        // Update shocking data
+        ctrl.isShocked = true;
+        ctrl.shockTimer = shockDuration;
+
+        float finalDamage = AppliedMagicResistance(ctrl, lightningDamage.GetValue());
+        ctrl.TakeDamage(Mathf.RoundToInt(finalDamage));
+
+        // Apply FX
+        ctrl.entityFX.StartCoroutine("Shocking", ctrl.shockTimer);
+    }
+
+    public virtual void DoRandomMagicAttack(StatsController ctrl)
+    {
+        // Random ability
+        List<string> abilities = new();
+        if (fireDamage.GetValue() > 0) abilities.Add("fire");
+        if (iceDamage.GetValue() > 0) abilities.Add("ice");
+        if (lightningDamage.GetValue() > 0) abilities.Add("lightning");
+
+        string rdAffect = abilities[Random.Range(0, abilities.Count)];
+        if (rdAffect == "fire")
+            DoFireAttack(ctrl);
+        else if (rdAffect == "ice")
+            DoIceAttack(ctrl);
+        else if (rdAffect == "lightning")
+            DoLightningAttack(ctrl);
+    }
+
+    protected virtual float AppliedMagicResistance(StatsController ctrl, float magicDamage)
+    {
+        float finalDamage = magicDamage - ctrl.intelligent.GetValue() * 3;
+        if (finalDamage < 0)
+            return 0;
+        return finalDamage;
+    }
+
     // Physical Attacks
     public virtual void DoDamage(StatsController ctrl)
     {
-        MagicAttack(ctrl);
-
         if (IsMissedAttack(ctrl)) { return; }
 
         float totalDamage = damage.GetValue() + strength.GetValue();
@@ -84,19 +164,19 @@ public class StatsController : MonoBehaviour
         ctrl.TakeDamage(Mathf.RoundToInt(finalDamage));
     }
 
-    private bool IsMissedAttack(StatsController ctrl)
+    protected virtual bool IsMissedAttack(StatsController ctrl)
     {
         float evasionPoints = ctrl.evasion.GetValue() + ctrl.agility.GetValue();
         // decrease 20% accuracy
         if (isShocked)
         {
-            Debug.Log("decrease 20% accuracy");
+            Debug.Log(">> " + gameObject.name + " -20% accuracy");
             evasionPoints *= 1.2f;
         }
         return (Random.Range(0, 100) < evasionPoints);
     }
 
-    private float AppliedArmor(StatsController ctrl, float currDamage)
+    public virtual float AppliedArmor(StatsController ctrl, float currDamage)
     {
         float finalDamage = currDamage;
         if (ctrl.isChilled)
@@ -113,50 +193,28 @@ public class StatsController : MonoBehaviour
         return finalDamage;
     }
 
-    private bool IsCritical()
+    protected virtual bool IsCritical()
     {
         float totalCriticalChance = critChance.GetValue() + agility.GetValue();
         return (Random.Range(0, 100) < totalCriticalChance);
     }
 
-    // Magical Attacks
-    private void MagicAttack(StatsController ctrl)
+    public virtual void TakeDamage(int damage, bool triggerAffect = true)
     {
-        List<string> abilities = new();
-        if (fireDamage.GetValue() > 0) abilities.Add("fire");
-        if (iceDamage.GetValue() > 0) abilities.Add("ice");
-        if (lightningDamage.GetValue() > 0) abilities.Add("lightning");
+        if (triggerAffect)
+            entity.DamageEffect();
 
-        string rdAffect = abilities[Random.Range(0, abilities.Count)];
-        if (rdAffect == "fire")
-        {
-            ctrl.isBurned = true;
-            ctrl.burnTimer = ctrl.burnDuration;
-            ctrl.TakeDamage(Mathf.RoundToInt(fireDamage.GetValue()));
-        }
-        else if (rdAffect == "ice")
-        {
-            ctrl.isChilled = true;
-            ctrl.chillTimer = ctrl.chillDuration;
-            ctrl.TakeDamage(Mathf.RoundToInt(iceDamage.GetValue()));
-        }
-        else if (rdAffect == "lightning")
-        {
-            ctrl.isShocked = true;
-            ctrl.shockTimer = ctrl.shockDuration;
-            ctrl.TakeDamage(Mathf.RoundToInt(lightningDamage.GetValue()));
-        }
-    }
-
-    public virtual void TakeDamage(int damage)
-    {
-        currentHp -= damage;
+        DecreaseHealth(damage);
         Debug.Log(gameObject.name + " HP: " + currentHp);
 
         if (currentHp <= 0)
-        {
             Die();
-        }
+    }
+
+    protected virtual void DecreaseHealth(int damage)
+    {
+        currentHp -= damage;
+        onHealthChanged?.Invoke();
     }
 
     protected virtual void Die()

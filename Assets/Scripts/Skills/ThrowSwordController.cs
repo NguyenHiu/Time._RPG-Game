@@ -21,6 +21,7 @@ public class ThrowSwordController : MonoBehaviour
     [Header("General")]
     private bool canRotate = true;
     private float freezeTime;
+    private float damage;
 
     [Header("Return info")]
     private float returnSpeed;
@@ -66,7 +67,8 @@ public class ThrowSwordController : MonoBehaviour
             float _gravityScale,
             float _returnSpeed,
             float _freezeTime,
-            float _destroyTime
+            float _destroyTime,
+            float _damage
     )
     {
         transform.position = _pos;
@@ -74,6 +76,7 @@ public class ThrowSwordController : MonoBehaviour
         rb.velocity = launchForce;
         returnSpeed = _returnSpeed;
         freezeTime = _freezeTime;
+        damage = _damage;
 
         if (!isPiercing)
             anim.SetBool("Rotation", true);
@@ -153,12 +156,23 @@ public class ThrowSwordController : MonoBehaviour
                     foreach (Collider2D hit in hitEnemies)
                     {
                         if (hit.TryGetComponent<Enemy>(out var e))
+                        {
                             FreezeDamage(e);
+                            DoDamage(e);
+                        }
                     }
                 }
             }
 
         }
+    }
+
+    private void DoDamage(Enemy e)
+    {
+        float finalDamage = PlayerManager.instance.player.statCtrl.AppliedArmor(e.statCtrl, damage);
+        Debug.Log("final damage; " + finalDamage);
+        if (finalDamage > 0)
+            e.statCtrl.TakeDamage(Mathf.RoundToInt(finalDamage));
     }
 
     private void FreezeDamage(Enemy enemy)
@@ -195,7 +209,10 @@ public class ThrowSwordController : MonoBehaviour
         if (Vector2.Distance(transform.position, nextTarget) < .1f)
         {
             if (currTargetTransform.TryGetComponent<Enemy>(out var e))
+            {
                 FreezeDamage(e);
+                DoDamage(e);
+            }
 
             currentTarget++;
             bounceTimes--;
@@ -234,6 +251,7 @@ public class ThrowSwordController : MonoBehaviour
         if (isPiercing && pierceTimes > 0 && isHitEnemy)
         {
             FreezeDamage(_enemy);
+            DoDamage(_enemy);
             pierceTimes--;
             return;
         }
@@ -260,14 +278,17 @@ public class ThrowSwordController : MonoBehaviour
     // StuckInto sets the object to be stuck in the the provided collision
     private void StuckInto(Collider2D collision)
     {
-        // TODO: check if the else is the same as the if statement
+        // TODO: check if the else statement is the same as the if statement
         if (!isSpinning)
             StopTheSword(RigidbodyConstraints2D.FreezeAll);
         else StopTheSword(RigidbodyConstraints2D.FreezePosition);
 
         // Damage the overlapping enemy
-        if (collision.TryGetComponent<Enemy>(out var e))
+        if (!isBouncing && !isSpinning && !isPiercing && collision.TryGetComponent<Enemy>(out var e))
+        {
             FreezeDamage(e);
+            DoDamage(e);
+        }
 
         // Even if bouncing, without bounce targets, then stick it into the ground
         if (isBouncing && bounceTargets.Count > 0)

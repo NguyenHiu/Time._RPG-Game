@@ -24,11 +24,12 @@ public class Entity : MonoBehaviour
     [SerializeField] private Vector2 knockbackDir;
     private bool isKnockback;
 
-    [Header("Status contronller")]
+    [Header("Stats contronller")]
     [SerializeField] public StatsController statCtrl;
 
     public int facingDir { get; private set; } = 1;
     public bool facingRight { get; private set; } = true;
+    public System.Action onFlipped;
 
     protected virtual void Awake()
     {
@@ -101,6 +102,7 @@ public class Entity : MonoBehaviour
         facingDir *= -1;
         facingRight = !facingRight;
         transform.Rotate(0, 180, 0);
+        onFlipped?.Invoke();
     }
 
     public virtual void FlipController(float _x)

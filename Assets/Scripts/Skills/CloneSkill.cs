@@ -18,12 +18,13 @@ public class CloneSkill : Skill
     [SerializeField] private bool createCloneInCounter;
     [SerializeField] private bool canCreateAnotherClone;
     [SerializeField] private float chanceToCreateAnotherClone;
+    [SerializeField] private float damage;
 
     public void CreateClone(Vector2 clonePos)
     {
         GameObject newClone = Instantiate(clonePrefab);
         CloneSkillController controller = newClone.GetComponent<CloneSkillController>();
-        controller.SetupClone(clonePos, cloneDuration, canAttack, canCreateAnotherClone, chanceToCreateAnotherClone);
+        controller.SetupClone(clonePos, cloneDuration, canAttack, canCreateAnotherClone, chanceToCreateAnotherClone, damage);
     }
 
     public IEnumerator CreateCloneInCounter(Vector2 clonePos)

@@ -24,9 +24,10 @@ public class ThrowSwordSkill : Skill
 {
     [Header("General")]
     public ThrowSwordType throwType;
-    [SerializeField] float returnSpeed;
-    [SerializeField] float freezeTime;
-    [SerializeField] float destroyTime;
+    [SerializeField] private float returnSpeed;
+    [SerializeField] private float freezeTime;
+    [SerializeField] private float destroyTime;
+    [SerializeField] private float damage;
 
     [Header("Bounce info")]
     [SerializeField] private int bounceTimes;
@@ -118,7 +119,7 @@ public class ThrowSwordSkill : Skill
         else if (throwType == ThrowSwordType.Spin)
             ctrl.SetupSpin(spinMaxDistance, spinTimer, hitCooldown);
 
-        ctrl.SetupSword(_pos, finalForce, gravityScale, returnSpeed, freezeTime, destroyTime);
+        ctrl.SetupSword(_pos, finalForce, gravityScale, returnSpeed, freezeTime, destroyTime, damage);
         PlayerManager.instance.player.AssignNewSword(newSword);
     }
 
