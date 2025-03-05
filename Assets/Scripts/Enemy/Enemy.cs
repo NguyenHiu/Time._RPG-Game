@@ -129,9 +129,9 @@ public class Enemy : Entity
     {
         base.SlowBy(_slowPercentage, _duration);
 
-        moveSpeed *= (1- _slowPercentage);
+        moveSpeed *= (1 - _slowPercentage);
 
-        StartCoroutine(CancelSlow(1/(1- _slowPercentage), _duration));
+        StartCoroutine(CancelSlow(1 / (1 - _slowPercentage), _duration));
     }
 
     public override IEnumerator CancelSlow(float _restorePercentage, float _duration)

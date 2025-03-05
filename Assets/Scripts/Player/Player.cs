@@ -1,5 +1,4 @@
 using System.Collections;
-using UnityEditorInternal;
 using UnityEngine;
 
 public class Player : Entity
@@ -126,7 +125,7 @@ public class Player : Entity
         jumpForce *= (1 - _slowPercentage);
         dashSpeed *= (1 - _slowPercentage);
 
-        StartCoroutine(CancelSlow(1/(1-_slowPercentage), _duration));
+        StartCoroutine(CancelSlow(1 / (1 - _slowPercentage), _duration));
     }
 
     public override IEnumerator CancelSlow(float _restorePercentage, float _duration)
