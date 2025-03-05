@@ -61,7 +61,6 @@ public class Entity : MonoBehaviour
 
     protected virtual void Update() { }
 
-    #region Velocity
     public virtual void SetZeroVelocity()
     {
         if (isKnockback) return;
@@ -82,9 +81,7 @@ public class Entity : MonoBehaviour
         rb.velocity = new Vector2(_xVelocity, _yVelocity);
         FlipController(_xVelocity);
     }
-    #endregion
 
-    #region Collision Checks
     public virtual bool IsGroundDetected() => Physics2D.Raycast(groundCheck.position, Vector2.down, groundCheckDistance, whatIsGround);
     public virtual bool IsWallDetected() => Physics2D.Raycast(wallCheck.position, new Vector2(facingDir, 0), wallCheckDistance, whatIsGround);
 
@@ -94,9 +91,7 @@ public class Entity : MonoBehaviour
         Gizmos.DrawLine(wallCheck.position, new Vector3(wallCheck.position.x + wallCheckDistance * facingDir, wallCheck.position.y));
         Gizmos.DrawWireSphere(attackCheck.position, attackRadius);
     }
-    #endregion
 
-    #region Flip
     public virtual void Flip()
     {
         facingDir *= -1;
@@ -108,13 +103,19 @@ public class Entity : MonoBehaviour
     public virtual void FlipController(float _x)
     {
         if (_x > 0 && !facingRight)
-        {
             Flip();
-        }
         else if (_x < 0 && facingRight)
-        {
             Flip();
-        }
     }
-    #endregion
+
+    public virtual void SlowBy(float _slowPercentage, float _duration)
+    {
+        anim.speed *= (1 - _slowPercentage);
+    }
+
+    public virtual IEnumerator CancelSlow(float _restorePercentage, float _duration)
+    {
+        yield return new WaitForSeconds(_duration);
+        anim.speed = 1;
+    }
 }

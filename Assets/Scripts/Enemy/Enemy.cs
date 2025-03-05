@@ -125,19 +125,18 @@ public class Enemy : Entity
         CloseCounterArea();
     }
 
-    public override void SetVelocity(float _xVelocity, float _yVelocity)
+    public override void SlowBy(float _slowPercentage, float _duration)
     {
-        // Reduce 20% speed while freezing
-        if (statCtrl.isChilled)
-        {
-            Debug.Log(">> " + gameObject.name + " -20% speed");
-            _xVelocity *= .8f;
-        }
-        else if (statCtrl.isShocked)
-        {
-            Debug.Log(">> " + gameObject.name + " -10% speed");
-            _xVelocity *= .9f;
-        }
-        base.SetVelocity(_xVelocity, _yVelocity);
+        base.SlowBy(_slowPercentage, _duration);
+
+        moveSpeed *= (1- _slowPercentage);
+
+        StartCoroutine(CancelSlow(1/(1- _slowPercentage), _duration));
+    }
+
+    public override IEnumerator CancelSlow(float _restorePercentage, float _duration)
+    {
+        yield return base.CancelSlow(_restorePercentage, _duration);
+        moveSpeed *= _restorePercentage;
     }
 }

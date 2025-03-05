@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using UnityEngine;
 
 public class StatsController : MonoBehaviour
@@ -24,22 +25,24 @@ public class StatsController : MonoBehaviour
     public Stat iceDamage;
     public Stat lightningDamage;
 
+    public float burnLastTime;
     public bool isBurned = false;
-    private float burnTimer;
+    public float burnTimer;
     public float burnDuration = 1.0f;
 
     public bool isChilled = false;
-    private float chillTimer;
+    public float chillTimer;
     public float chillDuration = 1.0f;
 
     public bool isShocked = false;
-    private float shockTimer;
+    public float shockTimer;
     public float shockDuration = 1.0f;
 
     [SerializeField] private float currentHp;
     public System.Action onHealthChanged;
     public EntityFX entityFX;
     private Entity entity;
+    private bool isDeath = false;
 
     protected virtual void Start()
     {
@@ -56,6 +59,16 @@ public class StatsController : MonoBehaviour
             burnTimer -= Time.deltaTime;
             if (burnTimer < 0)
                 isBurned = false;
+            else if (!isDeath)
+            {
+                burnLastTime -= Time.deltaTime;
+                if (burnLastTime < 0)
+                {
+                    float finalDamage = AppliedMagicResistance(this, fireDamage.GetValue());
+                    TakeDamage(Mathf.RoundToInt(finalDamage), false);
+                    burnLastTime = .5f;
+                }
+            }
         }
 
         if (isChilled)
@@ -104,6 +117,8 @@ public class StatsController : MonoBehaviour
         // Update Freezing Data
         ctrl.isChilled = true;
         ctrl.chillTimer = chillDuration;
+        float slowPercentage = .2f;
+        ctrl.entity.SlowBy(slowPercentage, ctrl.chillTimer);
 
         float finalDamage = AppliedMagicResistance(ctrl, iceDamage.GetValue());
         ctrl.TakeDamage(Mathf.RoundToInt(finalDamage));
@@ -117,6 +132,8 @@ public class StatsController : MonoBehaviour
         // Update shocking data
         ctrl.isShocked = true;
         ctrl.shockTimer = shockDuration;
+        float slowPercentage = .1f;
+        ctrl.entity.SlowBy(slowPercentage, ctrl.shockTimer);
 
         float finalDamage = AppliedMagicResistance(ctrl, lightningDamage.GetValue());
         ctrl.TakeDamage(Mathf.RoundToInt(finalDamage));
@@ -219,6 +236,7 @@ public class StatsController : MonoBehaviour
 
     protected virtual void Die()
     {
+        isDeath = true;
         Debug.Log(gameObject.name + " died.");
     }
 

@@ -41,8 +41,8 @@ public class EntityFX : MonoBehaviour
         {
             sr.material = isBurning ? originMat : burningMat;
             isBurning = !isBurning;
-            elapsed += 0.1f; // Blinking every 0.1 seconds
-            yield return new WaitForSeconds(0.1f);
+            elapsed += 0.3f; // Blinking every 0.3 seconds
+            yield return new WaitForSeconds(0.3f);
         }
 
         sr.material = originMat; // Reset material at the end
@@ -58,8 +58,8 @@ public class EntityFX : MonoBehaviour
         {
             sr.material = isBurning ? originMat : freezingMat;
             isBurning = !isBurning;
-            elapsed += 0.1f; // Blinking every 0.1 seconds
-            yield return new WaitForSeconds(0.1f);
+            elapsed += 0.3f; // Blinking every 0.3 seconds
+            yield return new WaitForSeconds(0.3f);
         }
 
         sr.material = originMat; // Reset material at the end
@@ -74,8 +74,8 @@ public class EntityFX : MonoBehaviour
         {
             sr.material = isBurning ? originMat : shockingMat;
             isBurning = !isBurning;
-            elapsed += 0.1f; // Blinking every 0.1 seconds
-            yield return new WaitForSeconds(0.1f);
+            elapsed += 0.3f; // Blinking every 0.3 seconds
+            yield return new WaitForSeconds(0.3f);
         }
 
         sr.material = originMat; // Reset material at the end

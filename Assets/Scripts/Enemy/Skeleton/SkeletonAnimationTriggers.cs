@@ -19,7 +19,7 @@ public class SkeletonAnimationTriggers : MonoBehaviour
         {
             if (obj.TryGetComponent<StatsController>(out var sc))
             {
-                enemy.statCtrl.DoDamage(sc);
+                enemy.statCtrl.DoRandomMagicAttack(sc);
             }
         }
     }

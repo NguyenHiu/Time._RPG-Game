@@ -22,7 +22,8 @@ public class PlayerAnimationTriggers : MonoBehaviour
         {
             if (obj.TryGetComponent<StatsController>(out var sc))
             {
-                player.statCtrl.DoDamage(sc);
+                //player.statCtrl.DoDamage(sc);
+                player.statCtrl.DoFireAttack(sc);
             }
         }
     }

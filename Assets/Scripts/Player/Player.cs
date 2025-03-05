@@ -1,4 +1,5 @@
 using System.Collections;
+using UnityEditorInternal;
 using UnityEngine;
 
 public class Player : Entity
@@ -115,5 +116,24 @@ public class Player : Entity
     {
         base.Die();
         stateMachine.ChangeState(deathState);
+    }
+
+    public override void SlowBy(float _slowPercentage, float _duration)
+    {
+        base.SlowBy(_slowPercentage, _duration);
+
+        moveSpeed *= (1 - _slowPercentage);
+        jumpForce *= (1 - _slowPercentage);
+        dashSpeed *= (1 - _slowPercentage);
+
+        StartCoroutine(CancelSlow(1/(1-_slowPercentage), _duration));
+    }
+
+    public override IEnumerator CancelSlow(float _restorePercentage, float _duration)
+    {
+        yield return base.CancelSlow(_restorePercentage, _duration);
+        moveSpeed *= _restorePercentage;
+        jumpForce *= _restorePercentage;
+        dashSpeed *= _restorePercentage;
     }
 }
