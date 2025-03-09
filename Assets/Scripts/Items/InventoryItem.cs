@@ -6,12 +6,12 @@ using UnityEngine;
 [Serializable]
 public class InventoryItem
 {
-    public ItemData item;
+    public ItemData data;
     public int stack;
 
     public InventoryItem(ItemData _item)
     {
-        this.item = _item;
+        this.data = _item;
         AddStack();
     }
 
