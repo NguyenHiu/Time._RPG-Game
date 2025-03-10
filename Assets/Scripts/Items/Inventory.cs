@@ -1,6 +1,5 @@
-using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.Experimental.GraphView;
+using Unity.IO.LowLevel.Unsafe;
 using UnityEngine;
 
 public class Inventory : MonoBehaviour
@@ -11,12 +10,16 @@ public class Inventory : MonoBehaviour
     [SerializeField] private Dictionary<ItemData, InventoryItem> inventoryDict;
     [SerializeField] private List<InventoryItem> stashItems;
     [SerializeField] private Dictionary<ItemData, InventoryItem> stashDict;
+    [SerializeField] private List<InventoryItem> equippedItems;
+    [SerializeField] private Dictionary<EquipmentItemData, InventoryItem> equippedDict;
 
     [Header("Inventory UI")]
     [SerializeField] private GameObject inventorySlotParent;
     private UI_InventorySlot[] inventorySlots;
     [SerializeField] private GameObject stashSlotParent;
     private UI_InventorySlot[] stashSlots;
+    [SerializeField] private GameObject equipmentSlotParent;
+    private UI_EquipmentSlot[] equipmentSlots;
 
     private void Awake()
     {
@@ -24,6 +27,8 @@ public class Inventory : MonoBehaviour
         inventoryDict = new Dictionary<ItemData, InventoryItem>();
         stashItems = new List<InventoryItem>();
         stashDict = new Dictionary<ItemData, InventoryItem>();
+        equippedItems = new List<InventoryItem>();
+        equippedDict = new Dictionary<EquipmentItemData, InventoryItem>();
     }
 
     private void Start()
@@ -34,17 +39,74 @@ public class Inventory : MonoBehaviour
 
         inventorySlots = inventorySlotParent.GetComponentsInChildren<UI_InventorySlot>();
         stashSlots = stashSlotParent.GetComponentsInChildren<UI_InventorySlot>();
+        equipmentSlots = equipmentSlotParent.GetComponentsInChildren<UI_EquipmentSlot>();
+    }
+
+    public void EquipItem(ItemData _newItem)
+    {
+        EquipmentItemData _newEquipmentItemData = _newItem as EquipmentItemData;
+        InventoryItem existingValue = null;
+        EquipmentItemData existingKey = null;
+        foreach (KeyValuePair<EquipmentItemData, InventoryItem> item in equippedDict)
+        {
+            if (item.Key.equipmentType == _newEquipmentItemData.equipmentType)
+            {
+                existingKey = item.Key;
+                existingValue = item.Value;
+                break;
+            }
+        }
+
+        if (existingValue != null)
+            Unequip(existingValue, existingKey);
+
+        _newEquipmentItemData.AddModifier();
+        InventoryItem newEquipItem = new(_newEquipmentItemData);
+        equippedItems.Add(newEquipItem);
+        equippedDict.Add(_newEquipmentItemData, newEquipItem);
+
+        RemoveItem(_newItem);
+    }
+
+    private void Unequip(InventoryItem existingValue, EquipmentItemData existingKey)
+    {
+        existingValue.data.RemoveModifier();
+        AddItem(existingValue.data);
+        equippedItems.Remove(existingValue);
+        equippedDict.Remove(existingKey);
     }
 
     private void UpdateInventory()
     {
-        for (int i = 0; i < inventoryItems.Count; i++)
+        foreach(UI_EquipmentSlot slot in equipmentSlots)
         {
-            inventorySlots[i].UpdateInventorySlot(inventoryItems[i]);
+            bool flag = false;
+            foreach(KeyValuePair<EquipmentItemData, InventoryItem> item in equippedDict)
+            {
+                if (item.Key.equipmentType == slot.slotType)
+                {
+                    slot.UpdateInventorySlot(item.Value);
+                    flag = true;
+                    break;
+                } 
+            }
+            if (!flag) slot.ClearSlot();
         }
-        for (int i = 0; i < stashItems.Count; i++)
+
+        for (int i = 0; i < inventorySlots.Length; i++)
         {
-            stashSlots[i].UpdateInventorySlot(stashItems[i]);
+            if (i < inventoryItems.Count)
+                inventorySlots[i].UpdateInventorySlot(inventoryItems[i]);
+            else
+                inventorySlots[i].ClearSlot();
+        }
+
+        for (int i = 0; i < stashSlots.Length; i++)
+        {
+            if (i < stashItems.Count)
+                stashSlots[i].UpdateInventorySlot(stashItems[i]);
+            else
+                stashSlots[i].ClearSlot();
         }
     }
 

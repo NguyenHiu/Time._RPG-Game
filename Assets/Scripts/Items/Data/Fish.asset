@@ -12,5 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d4e94828395394448abc634545feb46, type: 3}
   m_Name: Fish
   m_EditorClassIdentifier: 
+  itemType: 0
   itemName: Fish
-  icon: {fileID: 1337562163, guid: be55291aae08d434db3da3b59db3ab4a, type: 3}
+  icon: {fileID: -1222994951, guid: a9ca9a41598dd2e44b125928045c518f, type: 3}
