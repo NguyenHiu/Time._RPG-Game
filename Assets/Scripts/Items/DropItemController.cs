@@ -24,7 +24,7 @@ public class DropItemController : MonoBehaviour
         return res;
     }
 
-    public void RandomDroppedItems()
+    public virtual void RandomDroppedItems()
     {
         List<int> rdIdx = GetListOfIndex();
         while (rdIdx.Count > 0)
@@ -35,7 +35,8 @@ public class DropItemController : MonoBehaviour
                 DropItem(droppedItems[idx].item);
         }
     }
-    public void DropItem(ItemData _item)
+
+    protected void DropItem(ItemData _item)
     {
         GameObject droppedObj = Instantiate(dropPrefab, transform.position, Quaternion.identity);
         Vector2 randomVelocity = new(rd.Range(-5, 5), rd.Range(15, 20));
