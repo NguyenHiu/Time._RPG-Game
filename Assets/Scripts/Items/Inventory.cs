@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Unity.IO.LowLevel.Unsafe;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Inventory : MonoBehaviour
@@ -45,20 +46,21 @@ public class Inventory : MonoBehaviour
     public void EquipItem(ItemData _newItem)
     {
         EquipmentItemData _newEquipmentItemData = _newItem as EquipmentItemData;
-        InventoryItem existingValue = null;
-        EquipmentItemData existingKey = null;
+        ItemData existingData = null;
         foreach (KeyValuePair<EquipmentItemData, InventoryItem> item in equippedDict)
         {
             if (item.Key.equipmentType == _newEquipmentItemData.equipmentType)
             {
-                existingKey = item.Key;
-                existingValue = item.Value;
+                existingData = item.Key;
                 break;
             }
         }
 
-        if (existingValue != null)
-            Unequip(existingValue, existingKey);
+        if (existingData != null)
+        {
+            Unequip(existingData as EquipmentItemData);
+            AddItem(existingData);
+        }
 
         _newEquipmentItemData.AddModifier();
         InventoryItem newEquipItem = new(_newEquipmentItemData);
@@ -68,12 +70,14 @@ public class Inventory : MonoBehaviour
         RemoveItem(_newItem);
     }
 
-    private void Unequip(InventoryItem existingValue, EquipmentItemData existingKey)
+    public void Unequip(EquipmentItemData existingData)
     {
-        existingValue.data.RemoveModifier();
-        AddItem(existingValue.data);
-        equippedItems.Remove(existingValue);
-        equippedDict.Remove(existingKey);
+        if (equippedDict.TryGetValue(existingData, out InventoryItem value))
+        {
+            value.data.RemoveModifier();
+            equippedItems.Remove(value);
+            equippedDict.Remove(existingData);
+        }
     }
 
     private void UpdateInventory()
@@ -148,50 +152,71 @@ public class Inventory : MonoBehaviour
         }
     }
 
-    public void RemoveItem(ItemData item)
+    public void RemoveItem(ItemData item, int amount = 1)
     {
         if (item.itemType == ItemType.Equipment)
-            RemoveInventoryItem(item);
+            RemoveInventoryItem(item, amount);
         else if (item.itemType == ItemType.Material)
-            RemoveStashItem(item);
+            RemoveStashItem(item, amount);
 
         UpdateInventory();
     }
 
-    private void RemoveInventoryItem(ItemData item)
+    private void RemoveInventoryItem(ItemData item, int amount = 1)
     {
         if (inventoryDict.TryGetValue(item, out InventoryItem inventoryItem))
         {
-            if (inventoryItem.stack == 1)
+            if (inventoryItem.stack == amount)
             {
                 inventoryItems.Remove(inventoryItem);
                 inventoryDict.Remove(inventoryItem.data);
             }
             else
-                inventoryItem.RemoveStack();
+                inventoryItem.RemoveStack(amount);
         }
     }
 
-    private void RemoveStashItem(ItemData item)
+    private void RemoveStashItem(ItemData item, int amount = 1)
     {
         if (stashDict.TryGetValue(item, out InventoryItem stashItem))
         {
-            if (stashItem.stack == 1)
+            if (stashItem.stack == amount)
             {
                 stashItems.Remove(stashItem);
                 stashDict.Remove(stashItem.data);
             }
             else
-                stashItem.RemoveStack();
+                stashItem.RemoveStack(amount);
         }
     }
 
-    private void Update()
+    public bool Craft(EquipmentItemData _itemToCraft)
     {
-        if (Input.GetKeyDown(KeyCode.L))
+        List<InventoryItem> requiredMaterials = _itemToCraft.requiredMaterials;
+        foreach (InventoryItem item in requiredMaterials)
         {
-            InventoryItem lastItem = inventoryItems[^1];
-            RemoveItem(lastItem.data);
+            if (stashDict.TryGetValue(item.data, out InventoryItem inventoryItem))
+            {
+                if (inventoryItem.stack < item.stack)
+                    return false;
+            }
+            else return false;
         }
+
+        foreach (InventoryItem item in requiredMaterials)
+        {
+            if (stashDict.TryGetValue(item.data, out InventoryItem inventoryItem))
+            {
+                if (inventoryItem.stack < item.stack)
+                    return false;
+
+                inventoryItem.RemoveStack(item.stack);
+            }
+            else return false;
+        }
+
+        AddItem(_itemToCraft);
+
+        return true;
     }
 }

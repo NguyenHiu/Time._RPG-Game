@@ -32,6 +32,9 @@ public class ItemData : ScriptableObject
     public float iceDamage;
     public float lightningDamage;
 
+    [Header("Craft Materials")]
+    public List<InventoryItem> requiredMaterials;
+
     public ItemType itemType;
     public string itemName;
     public Sprite icon;

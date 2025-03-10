@@ -25,6 +25,11 @@ MonoBehaviour:
   fireDamage: 0
   iceDamage: 0
   lightningDamage: 0
+  requiredMaterials:
+  - data: {fileID: 11400000, guid: 262a67c2fd0d23b44a73e6a5d5f8cfbe, type: 2}
+    stack: 1
+  - data: {fileID: 11400000, guid: 015912ae1cf2dba4eb9c87feb48ebb7e, type: 2}
+    stack: 2
   itemType: 1
   itemName: Stolen Sword
   icon: {fileID: 1526008332, guid: a9ca9a41598dd2e44b125928045c518f, type: 3}

@@ -218,6 +218,8 @@ public class StatsController : MonoBehaviour
 
     public virtual void TakeDamage(int damage, bool triggerAffect = true)
     {
+        if (isDeath) return;
+
         if (triggerAffect)
             entity.DamageEffect();
 
@@ -238,6 +240,11 @@ public class StatsController : MonoBehaviour
     {
         isDeath = true;
         Debug.Log(gameObject.name + " died.");
+    }
+
+    public bool IsDeath()
+    {
+        return isDeath;
     }
 
 }

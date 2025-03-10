@@ -9,7 +9,7 @@ public class UI_InventorySlot : MonoBehaviour, IPointerDownHandler
     [SerializeField] private TextMeshProUGUI itemText;
     public InventoryItem itemData;
 
-    public void OnPointerDown(PointerEventData eventData)
+    public virtual void OnPointerDown(PointerEventData eventData)
     {
         if (itemData != null && itemData.data.itemType == ItemType.Equipment)
         {
