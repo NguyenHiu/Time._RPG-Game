@@ -13,9 +13,9 @@ public class BlackHoleSkill : Skill
     [SerializeField] private int attackTimes = 4;
     private GameObject blackHoleObj;
 
-    public override bool CanUseSkill()
+    public override bool TryUseSkill()
     {
-        return base.CanUseSkill();
+        return base.TryUseSkill();
     }
 
     protected override void UseSkill()

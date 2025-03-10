@@ -72,7 +72,7 @@ public class Player : Entity
 
         if (Input.GetKeyDown(KeyCode.F))
         {
-            SkillManager.instance.crystalSkill.CanUseSkill();
+            SkillManager.instance.crystalSkill.TryUseSkill();
         }
     }
 
@@ -96,7 +96,7 @@ public class Player : Entity
 
         if (IsWallDetected()) return;
 
-        if (Input.GetKeyDown(KeyCode.LeftShift) && SkillManager.instance.dashSkill.CanUseSkill())
+        if (Input.GetKeyDown(KeyCode.LeftShift) && SkillManager.instance.dashSkill.TryUseSkill())
         {
             stateMachine.ChangeState(dashState);
         }

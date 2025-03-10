@@ -39,7 +39,7 @@ public class PlayerBlackHoleUltimateState : PlayerState
         {
             player.rb.velocity = new Vector2(0, -0.1f);
             isCreated = true;
-            SkillManager.instance.blackholeSkill.CanUseSkill();
+            SkillManager.instance.blackholeSkill.TryUseSkill();
             blackhole = SkillManager.instance.blackholeSkill.GetBlackHoleObj();
         }
 

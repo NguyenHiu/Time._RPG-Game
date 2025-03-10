@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using UnityEngine;
+using static UnityEditor.PlayerSettings;
 
 /*  --Crystal Skill--
  *  
@@ -22,6 +24,7 @@ public class CrystalSkill : Skill
     [Header("Crystal Infor")]
     [SerializeField] private float damage;
     [SerializeField] private bool canShock;
+    [SerializeField] private GameObject currentCrystal;
 
     [Header("Explosive Crystal")]
     [SerializeField] private bool canExplode;
@@ -37,69 +40,94 @@ public class CrystalSkill : Skill
 
     [Header("Multi Crystals")]
     [SerializeField] private bool canUseMultiCrystals;
-    [SerializeField] private float multiCrystalsCooldown;
+    [SerializeField] private float multiCrystalCooldown;
     [SerializeField] private int noCrystals;
-    [SerializeField] private int noCreatedCrystals;
-    [SerializeField] GameObject lastCrystal;
-    private float copiedCooldown;
+    [SerializeField] List<GameObject> crystalHolders;
 
     protected override void Start()
     {
         base.Start();
-        noCreatedCrystals = 0;
-        copiedCooldown = cooldown;
-    }
-
-    protected override void Update()
-    {
-        base.Update();
+        crystalHolders = new();
+        RefillCrystal();
     }
 
     protected override void UseSkill()
     {
         base.UseSkill();
 
-        if ((!canUseMultiCrystals && !lastCrystal) || (canUseMultiCrystals && noCreatedCrystals < noCrystals))
+        TryUseSingleCrystal();
+        TryUseMultiCrystals();
+    }
+
+    private void TryUseSingleCrystal()
+    {
+        if (!canUseMultiCrystals)
         {
-            lastCrystal = Instantiate(crystalPrefab);
-            noCreatedCrystals++;
-            CrystalController ctrl = lastCrystal.GetComponent<CrystalController>();
-            Vector2 pos = PlayerManager.instance.player.transform.position;
-            pos.y -= 0.5f;
-
-            closestTarget = GetTheClosestEnemy(pos);
-
-            ctrl.SetupCrystal(pos, canExplode, growSpeed, canMove, moveSpeed, duration, closestTarget, damage, canShock);
+            if (currentCrystal == null)
+            {
+                currentCrystal = Instantiate(crystalPrefab);
+                Vector2 pos = PlayerManager.instance.player.transform.position;
+                pos.y -= 0.5f;
+                closestTarget = GetTheClosestEnemy(pos);
+                currentCrystal.GetComponent<CrystalController>().
+                    SetupCrystal(
+                        pos, canExplode, 
+                        growSpeed, canMove, 
+                        moveSpeed, duration, 
+                        closestTarget, 
+                        damage, canShock
+                    );
+            }
+            else if (canSwap)
+            {
+                Vector2 crystalPos = currentCrystal.transform.position;
+                crystalPos.y += 0.5f;
+                Vector2 playerPos = PlayerManager.instance.player.transform.position;
+                playerPos.y -= 0.5f;
+                currentCrystal.transform.position = playerPos;
+                PlayerManager.instance.player.transform.position = crystalPos;
+            }
         }
-        else if (canSwap && lastCrystal && !canUseMultiCrystals)
-        {
-            Vector2 crystalPos = lastCrystal.transform.position;
-            crystalPos.y += 0.5f;
-            Vector2 playerPos = PlayerManager.instance.player.transform.position;
-            playerPos.y -= 0.5f;
-            lastCrystal.transform.position = playerPos;
-            PlayerManager.instance.player.transform.position = crystalPos;
-        }
+    }
 
-        // This if-else allows us to enable or disable the multi-crystal while playing
-        // by setting the cooldown each time using skill
+    private void TryUseMultiCrystals()
+    {
         if (canUseMultiCrystals)
         {
-            if (noCreatedCrystals < noCrystals)
+            if (crystalHolders.Count > 0)
             {
-                cooldown = -.1f;
-            }
-            else
-            {
-                cooldown = multiCrystalsCooldown;
-                cooldownTimer = cooldown;
-                noCreatedCrystals = 0;
-                lastCrystal = null;
+                // Create crystal continuously
+                cooldown = 0;
+
+                GameObject crystalHolder = crystalHolders[^1];
+                GameObject newCrystal = Instantiate(crystalHolder, PlayerManager.instance.player.transform.position, Quaternion.identity);
+                crystalHolders.Remove(crystalHolder);
+
+                Vector2 pos = PlayerManager.instance.player.transform.position;
+                pos.y -= 0.5f;
+                closestTarget = GetTheClosestEnemy(pos);
+                newCrystal.GetComponent<CrystalController>().
+                    SetupCrystal(
+                        pos, canExplode,
+                        growSpeed, canMove,
+                        moveSpeed, duration,
+                        closestTarget,
+                        damage, canShock
+                    );
+
+                // Set cooldown & Refill crystal holders 
+                if (crystalHolders.Count <= 0)
+                {
+                    cooldown = multiCrystalCooldown;
+                    RefillCrystal();
+                }
             }
         }
-        else
-        {
-            cooldown = copiedCooldown;
-        }
+    }
+
+    public void RefillCrystal()
+    {
+        while (crystalHolders.Count < noCrystals)
+            crystalHolders.Add(crystalPrefab);
     }
 }
