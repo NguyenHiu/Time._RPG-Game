@@ -109,7 +109,7 @@ public class StatsController : MonoBehaviour
         ctrl.TakeDamage(Mathf.RoundToInt(finalDamage));
 
         // Apply FX
-        ctrl.entityFX.StartCoroutine("Burning", ctrl.burnTimer);
+        ctrl.entityFX.StartCoroutine("BurningFxFor", ctrl.burnTimer);
     }
 
     public virtual void DoIceAttack(StatsController ctrl)
@@ -124,7 +124,7 @@ public class StatsController : MonoBehaviour
         ctrl.TakeDamage(Mathf.RoundToInt(finalDamage));
 
         // Apply FX
-        ctrl.entityFX.StartCoroutine("Freezing", ctrl.chillTimer);
+        ctrl.entityFX.StartCoroutine("FreezingFxFor", ctrl.chillTimer);
     }
 
     public virtual void DoLightningAttack(StatsController ctrl)
@@ -139,7 +139,7 @@ public class StatsController : MonoBehaviour
         ctrl.TakeDamage(Mathf.RoundToInt(finalDamage));
 
         // Apply FX
-        ctrl.entityFX.StartCoroutine("Shocking", ctrl.shockTimer);
+        ctrl.entityFX.StartCoroutine("ShockingFxFor", ctrl.shockTimer);
     }
 
     public virtual void DoRandomMagicAttack(StatsController ctrl)

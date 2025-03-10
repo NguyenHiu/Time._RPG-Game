@@ -104,7 +104,7 @@ GameObject:
   - component: {fileID: 8113999547760035848}
   - component: {fileID: 3984214974205495278}
   m_Layer: 9
-  m_Name: Item Object - Iron Armor
+  m_Name: Item Object - Stolen Sword
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

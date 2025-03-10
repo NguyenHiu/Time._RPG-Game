@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 2783947547613159371}
   - component: {fileID: 4532288053320771055}
   m_Layer: 9
-  m_Name: Drop Item - Non
+  m_Name: Item Object - Iron Armor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
