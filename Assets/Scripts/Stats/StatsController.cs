@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.InteropServices;
 using UnityEngine;
 
 public class StatsController : MonoBehaviour
@@ -258,7 +257,7 @@ public class StatsController : MonoBehaviour
     {
         currentHp += value;
         int maxHealth = GetTotalMaxHealth();
-        if (currentHp > maxHealth) 
+        if (currentHp > maxHealth)
             currentHp = maxHealth;
         onHealthChanged?.Invoke();
     }

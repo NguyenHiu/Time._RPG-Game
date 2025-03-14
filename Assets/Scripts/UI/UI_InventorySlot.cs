@@ -1,7 +1,7 @@
-using UnityEngine.UI;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class UI_InventorySlot : MonoBehaviour, IPointerDownHandler
 {
@@ -35,7 +35,8 @@ public class UI_InventorySlot : MonoBehaviour, IPointerDownHandler
             if (itemData.stack > 1)
                 itemText.text = itemData.stack.ToString();
             else itemText.text = "";
-        } else
+        }
+        else
         {
             Debug.Log("itemData is null");
             itemImage.sprite = null;

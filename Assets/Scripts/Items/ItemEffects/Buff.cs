@@ -1,9 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
 
-public enum BuffType {
+public enum BuffType
+{
     strength,
     agility,
     intelligent,
@@ -68,6 +66,6 @@ public class Buff : ItemEffect
                 return stats.lightningDamage;
             default: break;
         }
-        return null;    
+        return null;
     }
 }

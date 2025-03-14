@@ -46,31 +46,31 @@ public class EquipmentItemData : ItemData
     public override void AddModifier()
     {
         Player player = PlayerManager.instance.player;
-        if (strength != 0) 
+        if (strength != 0)
             player.statCtrl.strength.AddModifier(strength);
-        if (agility != 0) 
+        if (agility != 0)
             player.statCtrl.agility.AddModifier(agility);
-        if (intelligent != 0) 
+        if (intelligent != 0)
             player.statCtrl.intelligent.AddModifier(intelligent);
-        if (vitality != 0) 
+        if (vitality != 0)
             player.statCtrl.vitality.AddModifier(vitality);
-        if (maxHP != 0) 
+        if (maxHP != 0)
             player.statCtrl.maxHP.AddModifier(maxHP);
-        if (armor != 0) 
+        if (armor != 0)
             player.statCtrl.armor.AddModifier(armor);
-        if (evasion != 0) 
+        if (evasion != 0)
             player.statCtrl.evasion.AddModifier(evasion);
-        if (damage != 0) 
+        if (damage != 0)
             player.statCtrl.damage.AddModifier(damage);
-        if (critChance != 0) 
+        if (critChance != 0)
             player.statCtrl.critChance.AddModifier(critChance);
-        if (critPower != 0) 
+        if (critPower != 0)
             player.statCtrl.critPower.AddModifier(critPower);
-        if (fireDamage != 0) 
+        if (fireDamage != 0)
             player.statCtrl.fireDamage.AddModifier(fireDamage);
-        if (iceDamage != 0) 
+        if (iceDamage != 0)
             player.statCtrl.iceDamage.AddModifier(iceDamage);
-        if (lightningDamage != 0) 
+        if (lightningDamage != 0)
             player.statCtrl.lightningDamage.AddModifier(lightningDamage);
     }
 

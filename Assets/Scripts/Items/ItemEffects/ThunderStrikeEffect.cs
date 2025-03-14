@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "Thunder Strike Effect", menuName = "Data/Item Effects/Thunder Strike Effect")]

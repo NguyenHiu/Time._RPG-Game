@@ -79,7 +79,7 @@ public class CrystalController : MonoBehaviour
             {
                 // Take damage from explosive
                 e.statCtrl.TakeDamage(Mathf.RoundToInt(damage));
-                
+
                 // Take magical damage
                 if (canShock)
                     PlayerManager.instance.player.statCtrl.DoLightningDamage(e.statCtrl);

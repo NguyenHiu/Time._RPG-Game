@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using UnityEngine;
-using static UnityEditor.PlayerSettings;
 
 /*  --Crystal Skill--
  *  
@@ -71,10 +70,10 @@ public class CrystalSkill : Skill
                 closestTarget = GetTheClosestEnemy(pos);
                 currentCrystal.GetComponent<CrystalController>().
                     SetupCrystal(
-                        pos, canExplode, 
-                        growSpeed, canMove, 
-                        moveSpeed, duration, 
-                        closestTarget, 
+                        pos, canExplode,
+                        growSpeed, canMove,
+                        moveSpeed, duration,
+                        closestTarget,
                         damage, canShock
                     );
             }
