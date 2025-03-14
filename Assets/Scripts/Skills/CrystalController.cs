@@ -76,7 +76,14 @@ public class CrystalController : MonoBehaviour
         foreach (var obj in colliders)
         {
             if (obj.TryGetComponent<Enemy>(out var e))
-                PlayerManager.instance.player.statCtrl.DoLightningAttack(e.statCtrl);
+            {
+                // Take damage from explosive
+                e.statCtrl.TakeDamage(Mathf.RoundToInt(damage));
+                
+                // Take magical damage
+                if (canShock)
+                    PlayerManager.instance.player.statCtrl.DoLightningDamage(e.statCtrl);
+            }
         }
     }
 

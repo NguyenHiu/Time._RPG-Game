@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using UnityEngine;
@@ -98,8 +99,25 @@ public class StatsController : MonoBehaviour
         return Mathf.RoundToInt(currentHp);
     }
 
+    public virtual float GetCurrentHealthPercent()
+    {
+        return GetCurrentHealth() * 100 / GetTotalMaxHealth();
+    }
+
+    public virtual void Buff(Stat buffType, float amount, float duration)
+    {
+        StartCoroutine(BuffIn(buffType, amount, duration));
+    }
+
+    private IEnumerator BuffIn(Stat buffType, float amount, float duration)
+    {
+        buffType.AddModifier(amount);
+        yield return new WaitForSeconds(duration);
+        buffType.RemoveModifier(amount);
+    }
+
     // Magical Attacks
-    public virtual void DoFireAttack(StatsController ctrl)
+    public virtual void DoFireDamage(StatsController ctrl)
     {
         // Update Fire Data
         ctrl.isBurned = true;
@@ -109,10 +127,10 @@ public class StatsController : MonoBehaviour
         ctrl.TakeDamage(Mathf.RoundToInt(finalDamage));
 
         // Apply FX
-        ctrl.entityFX.StartCoroutine("Burning", ctrl.burnTimer);
+        ctrl.entityFX.StartCoroutine(nameof(entityFX.BurningFxFor), ctrl.burnTimer);
     }
 
-    public virtual void DoIceAttack(StatsController ctrl)
+    public virtual void DoIceDamage(StatsController ctrl)
     {
         // Update Freezing Data
         ctrl.isChilled = true;
@@ -124,10 +142,10 @@ public class StatsController : MonoBehaviour
         ctrl.TakeDamage(Mathf.RoundToInt(finalDamage));
 
         // Apply FX
-        ctrl.entityFX.StartCoroutine("Freezing", ctrl.chillTimer);
+        ctrl.entityFX.StartCoroutine(nameof(entityFX.FreezingFxFor), ctrl.chillTimer);
     }
 
-    public virtual void DoLightningAttack(StatsController ctrl)
+    public virtual void DoLightningDamage(StatsController ctrl)
     {
         // Update shocking data
         ctrl.isShocked = true;
@@ -139,10 +157,10 @@ public class StatsController : MonoBehaviour
         ctrl.TakeDamage(Mathf.RoundToInt(finalDamage));
 
         // Apply FX
-        ctrl.entityFX.StartCoroutine("Shocking", ctrl.shockTimer);
+        ctrl.entityFX.StartCoroutine(nameof(entityFX.ShockingFxFor), ctrl.shockTimer);
     }
 
-    public virtual void DoRandomMagicAttack(StatsController ctrl)
+    public virtual void DoRandomMagicDamage(StatsController ctrl)
     {
         // Random ability
         List<string> abilities = new();
@@ -152,11 +170,11 @@ public class StatsController : MonoBehaviour
 
         string rdAffect = abilities[Random.Range(0, abilities.Count)];
         if (rdAffect == "fire")
-            DoFireAttack(ctrl);
+            DoFireDamage(ctrl);
         else if (rdAffect == "ice")
-            DoIceAttack(ctrl);
+            DoIceDamage(ctrl);
         else if (rdAffect == "lightning")
-            DoLightningAttack(ctrl);
+            DoLightningDamage(ctrl);
     }
 
     protected virtual float AppliedMagicResistance(StatsController ctrl, float magicDamage)
@@ -218,6 +236,8 @@ public class StatsController : MonoBehaviour
 
     public virtual void TakeDamage(int damage, bool triggerAffect = true)
     {
+        if (isDeath) return;
+
         if (triggerAffect)
             entity.DamageEffect();
 
@@ -234,10 +254,24 @@ public class StatsController : MonoBehaviour
         onHealthChanged?.Invoke();
     }
 
+    public virtual void IncreaseHealth(int value)
+    {
+        currentHp += value;
+        int maxHealth = GetTotalMaxHealth();
+        if (currentHp > maxHealth) 
+            currentHp = maxHealth;
+        onHealthChanged?.Invoke();
+    }
+
     protected virtual void Die()
     {
         isDeath = true;
         Debug.Log(gameObject.name + " died.");
+    }
+
+    public bool IsDeath()
+    {
+        return isDeath;
     }
 
 }

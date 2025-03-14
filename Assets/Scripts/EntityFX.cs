@@ -1,26 +1,24 @@
 using System.Collections;
+using System.Linq.Expressions;
 using UnityEngine;
 
 public class EntityFX : MonoBehaviour
 {
     private SpriteRenderer sr;
     private Material originMat;
+    private bool isFlashing = false;
 
     [Header("Flash FX")]
     [SerializeField] private Material flashMat;
 
     [Header("Burn FX")]
-    [SerializeField] private Material burningMat;
-    private bool isBurning = false;
+    [SerializeField] private Color[] burningColors;
 
     [Header("Freezing FX")]
-    [SerializeField] private Material freezingMat;
-    private bool isFreezing = false;
+    [SerializeField] private Color[] freezingColors;
 
     [Header("Shocking FX")]
-    [SerializeField] private Material shockingMat;
-    private bool isShocking = false;
-
+    [SerializeField] private Color[] shockingColors;
 
     private void Start()
     {
@@ -31,69 +29,13 @@ public class EntityFX : MonoBehaviour
     public IEnumerator Flash()
     {
         sr.material = flashMat;
+        Color currColor = sr.color;
+        isFlashing = true;
+        sr.color = Color.white;
         yield return new WaitForSeconds(.2f);
+        sr.color = currColor;
+        isFlashing = false;
         sr.material = originMat;
-    }
-
-    public IEnumerator Burning(float time)
-    {
-        if (isBurning) yield break;
-        isBurning = true;
-
-        float elapsed = 0f;
-        bool flag = false;
-
-        while (elapsed < time)
-        {
-            sr.material = flag ? originMat : burningMat;
-            flag = !flag;
-            elapsed += 0.15f; // Blinking every 0.15 seconds
-            yield return new WaitForSeconds(0.15f);
-        }
-
-        sr.material = originMat; // Reset material at the end
-        isBurning = false;
-    }
-
-
-    public IEnumerator Freezing(float time)
-    {
-        if (isFreezing) yield break;
-        isFreezing = true;
-
-        float elapsed = 0f;
-        bool flag = false;
-
-        while (elapsed < time)
-        {
-            sr.material = flag ? originMat : freezingMat;
-            flag = !flag;
-            elapsed += 0.15f; // Blinking every 0.15 seconds
-            yield return new WaitForSeconds(0.15f);
-        }
-
-        sr.material = originMat; // Reset material at the end
-        isFreezing = false;
-    }
-
-    public IEnumerator Shocking(float time)
-    {
-        if (isShocking) yield break;
-        isShocking = true;
-
-        float elapsed = 0f;
-        bool flag = false;
-
-        while (elapsed < time)
-        {
-            sr.material = flag ? originMat : shockingMat;
-            flag = !flag;
-            elapsed += 0.15f; // Blinking every 0.15 seconds
-            yield return new WaitForSeconds(0.15f);
-        }
-
-        sr.material = originMat; // Reset material at the end
-        isShocking = false;
     }
 
     public virtual void RedBlink()
@@ -103,9 +45,51 @@ public class EntityFX : MonoBehaviour
         else sr.color = Color.red;
     }
 
-    private void CancelRedBlink()
+    private void CancelColorChange()
     {
         CancelInvoke();
         sr.color = Color.white;
+    }
+
+    public void BurningFxFor(float _seconds)
+    {
+        InvokeRepeating(nameof(BurningColorFx), 0, .3f);
+        Invoke(nameof(CancelColorChange), _seconds);
+    }
+
+    private void BurningColorFx()
+    {
+        if (isFlashing) return;
+        if (sr.color != burningColors[0])
+            sr.color = burningColors[0];
+        else sr.color = burningColors[1];
+    }
+
+    public void ShockingFxFor(float _seconds)
+    {
+        InvokeRepeating(nameof(ShockingColorFx), 0, .3f);
+        Invoke(nameof(CancelColorChange), _seconds);
+    }
+
+    private void ShockingColorFx()
+    {
+        if (isFlashing) return;
+        if (sr.color != shockingColors[0])
+            sr.color = shockingColors[0];
+        else sr.color = shockingColors[1];
+    }
+
+    public void FreezingFxFor(float _seconds)
+    {
+        InvokeRepeating(nameof(FreezingColorFx), 0, .3f);
+        Invoke(nameof(CancelColorChange), _seconds);
+    }
+
+    private void FreezingColorFx()
+    {
+        if (isFlashing) return;
+        if (sr.color != freezingColors[0])
+            sr.color = freezingColors[0];
+        else sr.color = freezingColors[1];
     }
 }

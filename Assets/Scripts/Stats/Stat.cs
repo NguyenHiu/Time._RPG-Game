@@ -26,4 +26,9 @@ public class Stat
     {
         modifers.Add(val);
     }
+
+    public void RemoveModifier(float val)
+    {
+        modifers.Remove(val);
+    }
 }

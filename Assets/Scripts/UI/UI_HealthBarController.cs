@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class HealthBarController : MonoBehaviour
+public class UI_HealthBarController : MonoBehaviour
 {
     private Entity entity;
     private StatsController statsCtrl;

@@ -12,7 +12,7 @@ public class Skill : MonoBehaviour
         cooldownTimer -= Time.deltaTime;
     }
 
-    public virtual bool CanUseSkill()
+    public virtual bool TryUseSkill()
     {
         if (cooldownTimer < 0)
         {
@@ -24,9 +24,7 @@ public class Skill : MonoBehaviour
         return false;
     }
 
-    protected virtual void UseSkill()
-    {
-    }
+    protected virtual void UseSkill() { }
 
     public virtual Transform GetTheClosestEnemy(Vector2 currPos)
     {
@@ -36,7 +34,7 @@ public class Skill : MonoBehaviour
         float closestDistance = Mathf.Infinity;
         foreach (var obj in colliders)
         {
-            if (obj.TryGetComponent<Enemy>(out var e))
+            if (obj.TryGetComponent<Enemy>(out var e) && !e.statCtrl.IsDeath())
             {
                 float distance = Vector2.Distance(e.transform.position, currPos);
                 if (distance < closestDistance)

@@ -9,9 +9,9 @@ public class SkeletonAnimationTriggers : MonoBehaviour
         enemy = GetComponentInParent<Enemy>();
     }
 
-    private void TriggerAnim() => enemy.TriggerCurrentAnim();
+    public void TriggerAnim() => enemy.TriggerCurrentAnim();
 
-    private void TriggerAttack()
+    public void TriggerAttack()
     {
         Collider2D[] colliders = Physics2D.OverlapCircleAll(enemy.attackCheck.position, enemy.attackRadius);
 
@@ -19,16 +19,19 @@ public class SkeletonAnimationTriggers : MonoBehaviour
         {
             if (obj.TryGetComponent<Player>(out var p))
             {
-                enemy.statCtrl.DoRandomMagicAttack(p.statCtrl);
+                enemy.statCtrl.DoDamage(p.statCtrl);
+                if (Random.Range(0, 100) < 50)
+                    enemy.statCtrl.DoRandomMagicDamage(p.statCtrl);
             }
         }
     }
 
-    private void OpenCounterArea()
+    public void OpenCounterArea()
     {
         enemy.OpenCounterArea();
     }
-    private void CloseCounterArea()
+
+    public void CloseCounterArea()
     {
         enemy.CloseCounterArea();
     }
