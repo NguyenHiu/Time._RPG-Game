@@ -82,7 +82,7 @@ public class CrystalController : MonoBehaviour
                 
                 // Take magical damage
                 if (canShock)
-                    PlayerManager.instance.player.statCtrl.DoLightningAttack(e.statCtrl);
+                    PlayerManager.instance.player.statCtrl.DoLightningDamage(e.statCtrl);
             }
         }
     }

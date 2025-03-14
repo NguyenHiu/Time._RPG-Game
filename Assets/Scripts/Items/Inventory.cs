@@ -1,12 +1,14 @@
 using System.Collections.Generic;
-using Unity.IO.LowLevel.Unsafe;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class Inventory : MonoBehaviour
 {
     public static Inventory instance;
 
+    [Header("Started Pack")]
+    [SerializeField] private List<ItemData> startedPack;
+
+    [Header("Inventory")]
     [SerializeField] private List<InventoryItem> inventoryItems;
     [SerializeField] private Dictionary<ItemData, InventoryItem> inventoryDict;
     [SerializeField] private List<InventoryItem> stashItems;
@@ -21,6 +23,11 @@ public class Inventory : MonoBehaviour
     private UI_InventorySlot[] stashSlots;
     [SerializeField] private GameObject equipmentSlotParent;
     private UI_EquipmentSlot[] equipmentSlots;
+
+    private float lastTimeUsedFlask = 0;
+    private float lastTimeUsedArmor = 0;
+    private float flaskCooldown = 0;
+    private float armorCooldown = 0;
 
     private void Awake()
     {
@@ -41,6 +48,11 @@ public class Inventory : MonoBehaviour
         inventorySlots = inventorySlotParent.GetComponentsInChildren<UI_InventorySlot>();
         stashSlots = stashSlotParent.GetComponentsInChildren<UI_InventorySlot>();
         equipmentSlots = equipmentSlotParent.GetComponentsInChildren<UI_EquipmentSlot>();
+
+        foreach (ItemData item in startedPack)
+        {
+            AddItem(item);
+        }
     }
 
     public void EquipItem(ItemData _newItem)
@@ -82,17 +94,17 @@ public class Inventory : MonoBehaviour
 
     private void UpdateInventory()
     {
-        foreach(UI_EquipmentSlot slot in equipmentSlots)
+        foreach (UI_EquipmentSlot slot in equipmentSlots)
         {
             bool flag = false;
-            foreach(KeyValuePair<EquipmentItemData, InventoryItem> item in equippedDict)
+            foreach (KeyValuePair<EquipmentItemData, InventoryItem> item in equippedDict)
             {
                 if (item.Key.equipmentType == slot.slotType)
                 {
                     slot.UpdateInventorySlot(item.Value);
                     flag = true;
                     break;
-                } 
+                }
             }
             if (!flag) slot.ClearSlot();
         }
@@ -210,7 +222,7 @@ public class Inventory : MonoBehaviour
                 if (inventoryItem.stack < item.stack)
                     return false;
 
-                inventoryItem.RemoveStack(item.stack);
+                RemoveItem(inventoryItem.data, item.stack);
             }
             else return false;
         }
@@ -223,4 +235,46 @@ public class Inventory : MonoBehaviour
     public List<InventoryItem> GetEquipmentItems() => equippedItems;
     public List<InventoryItem> GetStashItems() => stashItems;
     public List<InventoryItem> GetInventoryItems() => inventoryItems;
+    public EquipmentItemData GetEquipmentByType(EquipmentType _type)
+    {
+        foreach (InventoryItem item in equippedItems)
+        {
+            if (((EquipmentItemData)item.data).equipmentType == _type)
+                return item.data as EquipmentItemData;
+        }
+
+        return null;
+    }
+
+    public void TryUseFlask()
+    {
+        foreach (KeyValuePair<EquipmentItemData, InventoryItem> item in equippedDict)
+        {
+            if (item.Key.equipmentType == EquipmentType.Flask)
+            {
+                if (Time.time > (lastTimeUsedFlask + flaskCooldown))
+                {
+                    flaskCooldown = item.Key.itemCooldown;
+                    lastTimeUsedFlask = Time.time;
+                    item.Key.ExecuteEffects(null);
+                }
+            }
+        }
+    }
+
+    public void TryUseArmor()
+    {
+        foreach (KeyValuePair<EquipmentItemData, InventoryItem> item in equippedDict)
+        {
+            if (item.Key.equipmentType == EquipmentType.Armor)
+            {
+                if (Time.time > (lastTimeUsedArmor + armorCooldown))
+                {
+                    armorCooldown = item.Key.itemCooldown;
+                    lastTimeUsedArmor = Time.time;
+                    item.Key.ExecuteEffects(PlayerManager.instance.player.transform);
+                }
+            }
+        }
+    }
 }

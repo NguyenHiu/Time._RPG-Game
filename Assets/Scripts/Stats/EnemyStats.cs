@@ -51,11 +51,6 @@ public class EnemyStats : StatsController
         base.TakeDamage(damage, triggerAffect);
     }
 
-    public void TakeMagicalDamage(int damage)
-    {
-        base.TakeDamage(damage);
-    }
-
     protected override void Die()
     {
         base.Die();

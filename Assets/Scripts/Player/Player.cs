@@ -74,6 +74,11 @@ public class Player : Entity
         {
             SkillManager.instance.crystalSkill.TryUseSkill();
         }
+
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            Inventory.instance.TryUseFlask();
+        }
     }
 
     public void AssignNewSword(GameObject _sword)

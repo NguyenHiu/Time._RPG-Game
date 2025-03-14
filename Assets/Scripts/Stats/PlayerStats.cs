@@ -31,4 +31,10 @@ public class PlayerStats : StatsController
     {
         base.DoDamage(ctrl);
     }
+
+    protected override void DecreaseHealth(int damage)
+    {
+        base.DecreaseHealth(damage);
+        Inventory.instance.TryUseArmor();
+    }
 }

@@ -10,9 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1e5b665384586a8418bf97e4c71fa5b0, type: 3}
-  m_Name: Wooden Sword
+  m_Name: Strength Flask
   m_EditorClassIdentifier: 
-  strength: 4
+  itemType: 1
+  itemName: Strength Flask
+  icon: {fileID: 1463097486, guid: a9ca9a41598dd2e44b125928045c518f, type: 3}
+  equipmentType: 3
+  itemCooldown: 10
+  itemEffects:
+  - {fileID: 11400000, guid: 59e6c8f7aabb0bf418ed19530d3bb23f, type: 2}
+  strength: 0
   agility: 0
   intelligent: 0
   vitality: 0
@@ -25,7 +32,4 @@ MonoBehaviour:
   fireDamage: 0
   iceDamage: 0
   lightningDamage: 0
-  itemType: 1
-  itemName: Wooden Sword
-  icon: {fileID: 1025091068, guid: a9ca9a41598dd2e44b125928045c518f, type: 3}
-  equipmentType: 0
+  requiredMaterials: []
