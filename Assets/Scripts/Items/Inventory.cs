@@ -23,6 +23,8 @@ public class Inventory : MonoBehaviour
     private UI_InventorySlot[] stashSlots;
     [SerializeField] private GameObject equipmentSlotParent;
     private UI_EquipmentSlot[] equipmentSlots;
+    [SerializeField] private GameObject statSlotsParent;
+    private UI_StatSlot[] statSlots;
 
     private float lastTimeUsedFlask = 0;
     private float lastTimeUsedArmor = 0;
@@ -48,6 +50,7 @@ public class Inventory : MonoBehaviour
         inventorySlots = inventorySlotParent.GetComponentsInChildren<UI_InventorySlot>();
         stashSlots = stashSlotParent.GetComponentsInChildren<UI_InventorySlot>();
         equipmentSlots = equipmentSlotParent.GetComponentsInChildren<UI_EquipmentSlot>();
+        statSlots = statSlotsParent.GetComponentsInChildren<UI_StatSlot>();
 
         foreach (ItemData item in startedPack)
         {
@@ -124,11 +127,16 @@ public class Inventory : MonoBehaviour
             else
                 stashSlots[i].ClearSlot();
         }
+
+        for (int i = 0; i < statSlots.Length; i++)
+        {
+            statSlots[i].UpdateStatValue();
+        }
     }
 
     public void AddItem(ItemData item)
     {
-        if (item.itemType == ItemType.Equipment)
+        if (item.itemType == ItemType.Equipment && !IsInventoryFull())
             AddToInventory(item);
         else if (item.itemType == ItemType.Material)
             AddToStash(item);
@@ -276,5 +284,10 @@ public class Inventory : MonoBehaviour
                 }
             }
         }
+    }
+
+    public bool IsInventoryFull()
+    {
+        return inventoryItems.Count >= inventorySlots.Length;
     }
 }

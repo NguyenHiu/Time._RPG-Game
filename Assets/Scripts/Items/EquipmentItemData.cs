@@ -37,11 +37,12 @@ public class EquipmentItemData : ItemData
     [Header("Magic Stats")]
     public float fireDamage;
     public float iceDamage;
-    public float lightningDamage;
+    public float lightingDamage;
 
     [Header("Craft Materials")]
     public List<InventoryItem> requiredMaterials;
 
+    private int line;
 
     public override void AddModifier()
     {
@@ -70,8 +71,8 @@ public class EquipmentItemData : ItemData
             player.statCtrl.fireDamage.AddModifier(fireDamage);
         if (iceDamage != 0)
             player.statCtrl.iceDamage.AddModifier(iceDamage);
-        if (lightningDamage != 0)
-            player.statCtrl.lightningDamage.AddModifier(lightningDamage);
+        if (lightingDamage != 0)
+            player.statCtrl.lightingDamage.AddModifier(lightingDamage);
     }
 
     public override void RemoveModifier()
@@ -89,13 +90,57 @@ public class EquipmentItemData : ItemData
         player.statCtrl.critPower.RemoveModifier(critPower);
         player.statCtrl.fireDamage.RemoveModifier(fireDamage);
         player.statCtrl.iceDamage.RemoveModifier(iceDamage);
-        player.statCtrl.lightningDamage.RemoveModifier(lightningDamage);
+        player.statCtrl.lightingDamage.RemoveModifier(lightingDamage);
     }
     public virtual void ExecuteEffects(Transform _enemyTrans)
     {
         foreach (ItemEffect ie in itemEffects)
         {
             ie.ExecuteEffect(_enemyTrans);
+        }
+    }
+
+    // Item Description
+    public override string GetDescription()
+    {
+        sb.Length = 0;
+        line = 0;
+
+        AddItemDescription(strength, "Strength");
+        AddItemDescription(agility, "Agility");
+        AddItemDescription(intelligent, "Intelligent");
+        AddItemDescription(vitality, "Vitality");
+        AddItemDescription(maxHP, "Health");
+        AddItemDescription(armor, "Armor");
+        AddItemDescription(evasion, "Evasion");
+        AddItemDescription(damage, "Damage");
+        AddItemDescription(critChance, "Crit. Chance");
+        AddItemDescription(critPower, "Crit. Power");
+        AddItemDescription(fireDamage, "Fire Damage");
+        AddItemDescription(iceDamage, "Ice Damage");
+        AddItemDescription(lightingDamage, "Lighting Damage");
+        
+        while (line < 5)
+        {
+            sb.AppendLine();
+            line++;
+        }
+
+        return sb.ToString();
+
+    }
+    public void AddItemDescription(float val, string name)
+    {
+        if (val != 0)
+        {
+            if (sb.Length > 0)
+                sb.AppendLine();
+
+            if (val > 0) sb.Append(" + ");
+            else sb.Append(" - ");
+            float _val = val < 0 ? -val : val;
+            sb.Append(_val + " " + name);
+            line++;
         }
     }
 }

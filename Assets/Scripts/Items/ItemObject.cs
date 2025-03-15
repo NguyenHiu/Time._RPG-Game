@@ -22,6 +22,13 @@ public class ItemObject : MonoBehaviour
 
     public void PickUpItem()
     {
+        if (Inventory.instance.IsInventoryFull())
+        {
+            Debug.Log("The inventory is full");
+            rb.velocity = new Vector2(0, 5);
+            return;
+        }
+
         Inventory.instance.AddItem(itemData);
         Destroy(gameObject);
     }

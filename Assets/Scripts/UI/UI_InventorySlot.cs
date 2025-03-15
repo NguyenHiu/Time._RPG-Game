@@ -1,13 +1,19 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.UI;
+using UIImage = UnityEngine.UI;
 
-public class UI_InventorySlot : MonoBehaviour, IPointerDownHandler
+public class UI_InventorySlot : MonoBehaviour, IPointerDownHandler, IPointerEnterHandler, IPointerExitHandler
 {
-    [SerializeField] private Image itemImage;
+    [SerializeField] private UIImage.Image itemImage;
     [SerializeField] private TextMeshProUGUI itemText;
     public InventoryItem itemData;
+    private UI ui;
+
+    private void Start()
+    {
+        ui = GetComponentInParent<UI>();
+    }
 
     public virtual void OnPointerDown(PointerEventData eventData)
     {
@@ -52,5 +58,17 @@ public class UI_InventorySlot : MonoBehaviour, IPointerDownHandler
         itemImage.color = Color.clear;
         itemText.text = "";
         itemData = null;
+    }
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        if (itemData != null)
+            ui.equipmentTooltips.EnableTooltips(itemData.data as EquipmentItemData);
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        if (itemData != null)
+            ui.equipmentTooltips.DisableTooltips();
     }
 }

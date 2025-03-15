@@ -12,6 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e5b665384586a8418bf97e4c71fa5b0, type: 3}
   m_Name: Thunder Claw
   m_EditorClassIdentifier: 
+  itemType: 1
+  itemName: Thunder Claw
+  icon: {fileID: 1674809057, guid: a9ca9a41598dd2e44b125928045c518f, type: 3}
+  equipmentType: 0
+  itemCooldown: 0
   itemEffects:
   - {fileID: 11400000, guid: 3494e61b62d6cf048a8eaa62b8714d4f, type: 2}
   strength: 10
@@ -26,9 +31,5 @@ MonoBehaviour:
   critPower: 0
   fireDamage: 0
   iceDamage: 0
-  lightningDamage: 5
+  lightingDamage: 15
   requiredMaterials: []
-  itemType: 1
-  itemName: Thunder Claw
-  icon: {fileID: 1674809057, guid: a9ca9a41598dd2e44b125928045c518f, type: 3}
-  equipmentType: 0
