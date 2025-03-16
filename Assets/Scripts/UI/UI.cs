@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class UI : MonoBehaviour
@@ -10,6 +8,7 @@ public class UI : MonoBehaviour
     public GameObject optionsUI;
     public Tooltips_Equipment equipmentTooltips;
     public Tooltips_Stat statTooltips;
+    public CraftWindow craftWindow;
 
     private void Start()
     {
@@ -36,7 +35,16 @@ public class UI : MonoBehaviour
             transform.GetChild(i).gameObject.SetActive(false);
 
         if (_menu != null)
+        {
             _menu.SetActive(true);
+
+            // Set default value 
+            CraftList craftList = _menu.GetComponentInChildren<CraftList>();
+            if (craftList != null)
+            {
+                craftList.InitCraftList();
+            }
+        }
     }
 
     private void SwitchToUsingKeyboard(GameObject _menu)

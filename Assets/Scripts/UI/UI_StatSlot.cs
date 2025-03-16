@@ -20,16 +20,19 @@ public class UI_StatSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     {
         gameObject.name = "Stat - " + statName;
     }
+
     private void Start()
     {
         ui = GetComponentInParent<UI>();
-        statCtrl = PlayerManager.instance.player.statCtrl;
         statNameText.text = statName;
         UpdateStatValue();
     }
 
     public void UpdateStatValue()
     {
+        if (statCtrl == null)
+            statCtrl = PlayerManager.instance.player.statCtrl;
+
         switch (statType)
         {
             case StatType.maxHP:

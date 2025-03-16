@@ -10,15 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1e5b665384586a8418bf97e4c71fa5b0, type: 3}
-  m_Name: Freezing Armor
+  m_Name: Healing Flask
   m_EditorClassIdentifier: 
   itemType: 1
-  itemName: Freezing Armor
-  icon: {fileID: -1871269579, guid: a9ca9a41598dd2e44b125928045c518f, type: 3}
-  equipmentType: 1
-  itemCooldown: 0
+  itemName: Healing Flask
+  icon: {fileID: -410334530, guid: a9ca9a41598dd2e44b125928045c518f, type: 3}
+  equipmentType: 3
+  itemCooldown: 2
   itemEffects:
-  - {fileID: 11400000, guid: 4a32973bd68acbf43a6766f85b73e78d, type: 2}
+  - {fileID: 11400000, guid: 6e761469c20b2934d85e73720d42b367, type: 2}
   strength: 0
   agility: 0
   intelligent: 0
@@ -31,5 +31,5 @@ MonoBehaviour:
   critPower: 0
   fireDamage: 0
   iceDamage: 0
-  lightningDamage: 0
+  lightingDamage: 0
   requiredMaterials: []

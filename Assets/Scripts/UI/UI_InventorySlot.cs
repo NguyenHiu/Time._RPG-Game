@@ -5,27 +5,26 @@ using UIImage = UnityEngine.UI;
 
 public class UI_InventorySlot : MonoBehaviour, IPointerDownHandler, IPointerEnterHandler, IPointerExitHandler
 {
-    [SerializeField] private UIImage.Image itemImage;
-    [SerializeField] private TextMeshProUGUI itemText;
+    [SerializeField] protected UIImage.Image itemImage;
+    [SerializeField] protected TextMeshProUGUI itemText;
     public InventoryItem itemData;
-    private UI ui;
+    protected UI ui;
 
-    private void Start()
+    protected void Start()
     {
         ui = GetComponentInParent<UI>();
     }
 
     public virtual void OnPointerDown(PointerEventData eventData)
     {
-        if (Input.GetKey(KeyCode.LeftControl) && itemData != null)
+        if (itemData != null)
         {
-            Inventory.instance.RemoveItem(itemData.data);
-            return;
-        }
+            if (Input.GetKey(KeyCode.LeftControl))
+                Inventory.instance.RemoveItem(itemData.data);
+            else if (itemData.data.itemType == ItemType.Equipment)
+                Inventory.instance.EquipItem(itemData.data);
 
-        if (itemData != null && itemData.data.itemType == ItemType.Equipment)
-        {
-            Inventory.instance.EquipItem(itemData.data);
+            ui.equipmentTooltips.DisableTooltips();
         }
     }
 

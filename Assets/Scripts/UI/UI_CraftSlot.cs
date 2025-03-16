@@ -8,10 +8,19 @@ public class UI_CraftSlot : UI_InventorySlot
         UpdateInventorySlot(itemData);
     }
 
+    public void SetupCraftSlot(InventoryItem invenItem)
+    {
+        itemData = invenItem;
+        itemImage.sprite = invenItem.data.icon;
+        itemText.text = invenItem.data.itemName;
+
+        if (itemText.text.Length > 18)
+            itemText.fontSize *= .7f;
+        else itemText.fontSize = 17;
+    }
+
     public override void OnPointerDown(PointerEventData eventData)
     {
-        bool isSuccessful = Inventory.instance.Craft(itemData.data as EquipmentItemData);
-        if (!isSuccessful)
-            Debug.Log("Don't have enough materials");
+        ui.craftWindow.UpdateCraftItem(itemData.data as EquipmentItemData);
     }
 }

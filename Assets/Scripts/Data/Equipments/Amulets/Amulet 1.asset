@@ -10,16 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1e5b665384586a8418bf97e4c71fa5b0, type: 3}
-  m_Name: Thunder Claw
+  m_Name: Amulet 1
   m_EditorClassIdentifier: 
   itemType: 1
-  itemName: Thunder Claw
-  icon: {fileID: 1674809057, guid: a9ca9a41598dd2e44b125928045c518f, type: 3}
-  equipmentType: 0
+  itemName: Amulet 1
+  icon: {fileID: -245851270, guid: a9ca9a41598dd2e44b125928045c518f, type: 3}
+  equipmentType: 2
   itemCooldown: 0
-  itemEffects:
-  - {fileID: 11400000, guid: 3494e61b62d6cf048a8eaa62b8714d4f, type: 2}
-  strength: 10
+  itemEffects: []
+  strength: 0
   agility: 0
   intelligent: 0
   vitality: 0
@@ -31,5 +30,9 @@ MonoBehaviour:
   critPower: 0
   fireDamage: 0
   iceDamage: 0
-  lightingDamage: 15
-  requiredMaterials: []
+  lightingDamage: 0
+  requiredMaterials:
+  - data: {fileID: 11400000, guid: 262a67c2fd0d23b44a73e6a5d5f8cfbe, type: 2}
+    stack: 2
+  - data: {fileID: 11400000, guid: 624ee8f2e74d89342b5beac1d4a3bb89, type: 2}
+    stack: 1

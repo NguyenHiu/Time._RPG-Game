@@ -53,9 +53,7 @@ public class Inventory : MonoBehaviour
         statSlots = statSlotsParent.GetComponentsInChildren<UI_StatSlot>();
 
         foreach (ItemData item in startedPack)
-        {
             AddItem(item);
-        }
     }
 
     public void EquipItem(ItemData _newItem)
@@ -236,6 +234,8 @@ public class Inventory : MonoBehaviour
         }
 
         AddItem(_itemToCraft);
+
+        Debug.Log("Craft successfully!");
 
         return true;
     }
