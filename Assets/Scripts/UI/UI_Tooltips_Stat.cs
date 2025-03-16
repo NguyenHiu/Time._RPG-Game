@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class Tooltips_Stat : MonoBehaviour
+public class UI_Tooltips_Stat : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI description;
 

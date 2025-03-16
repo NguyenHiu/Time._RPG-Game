@@ -6,9 +6,10 @@ public class UI : MonoBehaviour
     public GameObject skillTreeUI;
     public GameObject craftUI;
     public GameObject optionsUI;
-    public Tooltips_Equipment equipmentTooltips;
-    public Tooltips_Stat statTooltips;
-    public CraftWindow craftWindow;
+    public UI_Tooltips_Equipment equipmentTooltips;
+    public UI_Tooltips_Stat statTooltips;
+    public UI_Tooltips_Skill skillTooltips;
+    public UI_CraftWindow craftWindow;
 
     private void Start()
     {
@@ -39,7 +40,7 @@ public class UI : MonoBehaviour
             _menu.SetActive(true);
 
             // Set default value 
-            CraftList craftList = _menu.GetComponentInChildren<CraftList>();
+            UI_CraftList craftList = _menu.GetComponentInChildren<UI_CraftList>();
             if (craftList != null)
             {
                 craftList.InitCraftList();

@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class CraftList : MonoBehaviour, IPointerDownHandler
+public class UI_CraftList : MonoBehaviour, IPointerDownHandler
 {
     [SerializeField] private List<ItemData> items;
     [SerializeField] private Transform craftSlotsParent;
@@ -15,9 +15,8 @@ public class CraftList : MonoBehaviour, IPointerDownHandler
 
     public void InitCraftList()
     {
-        Debug.Log("Init Craft List");
-        transform.parent.GetChild(0).GetComponent<CraftList>().CreateCraftList();
-        if (items[0] != null)
+        transform.parent.GetChild(0).GetComponent<UI_CraftList>().CreateCraftList();
+        if (items.Count > 0 && items[0] != null)
             GetComponentInParent<UI>().craftWindow.UpdateCraftItem(items[0] as EquipmentItemData);
     }
 
