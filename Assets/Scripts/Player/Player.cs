@@ -70,7 +70,7 @@ public class Player : Entity
         stateMachine.currentState.Update();
         CheckDashState();
 
-        if (Input.GetKeyDown(KeyCode.F))
+        if (Input.GetKeyDown(KeyCode.F) && SkillManager.instance.crystalSkill.CanSummonCrystal())
         {
             SkillManager.instance.crystalSkill.TryUseSkill();
         }
@@ -89,11 +89,14 @@ public class Player : Entity
     public void ClearTheSword()
     {
         stateMachine.ChangeState(catchSwordState);
+        SkillManager.instance.throwSwordSkill.ResetCooldownTimer();
         Destroy(sword);
     }
 
     public void CheckDashState()
     {
+        if (!SkillManager.instance.dashSkill.CanDash())
+            return;
 
         dashDir = Input.GetAxisRaw("Horizontal");
         if (dashDir == 0)

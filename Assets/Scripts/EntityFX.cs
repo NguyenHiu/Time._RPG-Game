@@ -44,7 +44,7 @@ public class EntityFX : MonoBehaviour
         else sr.color = Color.red;
     }
 
-    private void CancelColorChange()
+    public void CancelColorChange()
     {
         CancelInvoke();
         sr.color = Color.white;

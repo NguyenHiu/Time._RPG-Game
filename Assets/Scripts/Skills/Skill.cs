@@ -24,6 +24,8 @@ public class Skill : MonoBehaviour
         return false;
     }
 
+    public virtual bool CanUseSkill() => cooldownTimer < 0;
+
     protected virtual void UseSkill() { }
 
     public virtual Transform GetTheClosestEnemy(Vector2 currPos)

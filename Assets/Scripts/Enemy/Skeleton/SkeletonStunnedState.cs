@@ -18,13 +18,13 @@ public class SkeletonStunnedState : EnemyState
             enemy.rb.velocity.x - enemy.facingDir * enemy.stunnedDir.x,
             enemy.rb.velocity.y + enemy.stunnedDir.y
         );
-        enemy.fx.InvokeRepeating("RedBlink", 0, .1f);
+        enemy.fx.InvokeRepeating(nameof(enemy.fx.RedBlink), 0, .1f);
     }
 
     public override void Exit()
     {
         base.Exit();
-        enemy.fx.Invoke("CancelRedBlink", 0);
+        enemy.fx.Invoke(nameof(enemy.fx.CancelColorChange), 0);
     }
 
     public override void Update()

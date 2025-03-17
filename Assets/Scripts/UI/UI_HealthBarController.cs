@@ -41,6 +41,8 @@ public class UI_HealthBarController : MonoBehaviour
     // UpdateHealthBarUI is called right after the health value of the entity is changed
     private void UpdateHealthBarSlider()
     {
+        Debug.Log("MAX. Heath: " + statsCtrl.GetTotalMaxHealth());
+        Debug.Log("CUR. Heath: " + statsCtrl.GetCurrentHealth());
         slider.maxValue = statsCtrl.GetTotalMaxHealth();
         slider.value = statsCtrl.GetCurrentHealth();
     }

@@ -7,8 +7,7 @@ public class PlayerDashState : PlayerState
     public override void Enter()
     {
         base.Enter();
-        if (SkillManager.instance.dashSkill.isCreateClone)
-            SkillManager.instance.cloneSkill.CreateClone(player.transform.position);
+        SkillManager.instance.dashSkill.LeaveMirage(player.transform.position);
         stateTimer = player.dashDuration;
     }
 

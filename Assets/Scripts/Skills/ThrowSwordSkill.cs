@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 /*
  * -- Throw Sword Skill --
@@ -23,39 +24,47 @@ public enum ThrowSwordType
 public class ThrowSwordSkill : Skill
 {
     [Header("General")]
-    public ThrowSwordType throwType;
-    [SerializeField] private float returnSpeed;
-    [SerializeField] private float freezeTime;
-    [SerializeField] private float destroyTime;
-    [SerializeField] private float damage;
+    [SerializeField] private bool canThrowSword = false;
+    public ThrowSwordType throwType = ThrowSwordType.Regular;
+    [SerializeField] private float returnSpeed = 17f;
+    [SerializeField] private float destroyTime = 10f;
+    [SerializeField] private float damage = 2f;
+    [SerializeField] private UI_SkillSlot throwSkillSlot;
+
+    [Header("Time Stop")]
+    [SerializeField] private bool canStopTime = false;
+    [SerializeField] private float freezeTime = 1.5f;
+    [SerializeField] private UI_SkillSlot timeStopSkillSlot;
 
     [Header("Bounce info")]
-    [SerializeField] private int bounceTimes;
-    [SerializeField] private float bounceSpeed;
-    [SerializeField] private float bounceGravity;
+    [SerializeField] private int bounceTimes = 3;
+    [SerializeField] private float bounceSpeed = 20f;
+    [SerializeField] private float bounceGravity = 4.5f;
+    [SerializeField] private UI_SkillSlot bounceSkillSlot;
 
     [Header("Pierce info")]
-    [SerializeField] private int pierceTimes;
-    [SerializeField] private float pierceGravity;
+    [SerializeField] private int pierceTimes = 10;
+    [SerializeField] private float pierceGravity = 1f;
+    [SerializeField] private UI_SkillSlot pierceSkillSlot;
 
     [Header("Spin info")]
-    [SerializeField] private float spinGravity = 2;
-    [SerializeField] private float spinMaxDistance = 7;
+    [SerializeField] private float spinGravity = 2f;
+    [SerializeField] private float spinMaxDistance = 7f;
     [SerializeField] private float spinTimer = 1f;
     [SerializeField] private float hitCooldown = .35f;
+    [SerializeField] private UI_SkillSlot spinSkillSlot;
 
     [Header("Skill info")]
     [SerializeField] private GameObject swordPrefab;
-    [SerializeField] private Vector2 launchForce;
-    [SerializeField] private float defaultGravityScale;
+    [SerializeField] private Vector2 launchForce = new(35, 25);
+    [SerializeField] private float defaultGravityScale = 4.5f;
     private float gravityScale;
-
 
     [Header("Aim info")]
     [SerializeField] private GameObject dotPrefab;
     [SerializeField] private GameObject aimCurve;
-    [SerializeField] private int numberOfDots;
-    [SerializeField] private float dotsDistance;
+    [SerializeField] private int numberOfDots = 20;
+    [SerializeField] private float dotsDistance = 0.07f;
     private GameObject[] dots;
     private Vector2 finalForce;
 
@@ -64,6 +73,11 @@ public class ThrowSwordSkill : Skill
         base.Start();
 
         GenerateDots();
+        throwSkillSlot.GetComponent<Button>().onClick.AddListener(() => UnlockThrowSkill());
+        bounceSkillSlot.GetComponent<Button>().onClick.AddListener(() => UnlockBounceSkill());
+        pierceSkillSlot.GetComponent<Button>().onClick.AddListener(() => UnlockPierceSkill());
+        spinSkillSlot.GetComponent<Button>().onClick.AddListener(() => UnlockSpinSkill());
+        timeStopSkillSlot.GetComponent<Button>().onClick.AddListener(() => UnlockTimeStop());
     }
 
     protected override void Update()
@@ -119,7 +133,7 @@ public class ThrowSwordSkill : Skill
         else if (throwType == ThrowSwordType.Spin)
             ctrl.SetupSpin(spinMaxDistance, spinTimer, hitCooldown);
 
-        ctrl.SetupSword(_pos, finalForce, gravityScale, returnSpeed, freezeTime, destroyTime, damage);
+        ctrl.SetupSword(_pos, finalForce, gravityScale, returnSpeed, GetFreezeTime(), destroyTime, damage);
         PlayerManager.instance.player.AssignNewSword(newSword);
     }
 
@@ -156,5 +170,62 @@ public class ThrowSwordSkill : Skill
         Vector2 initVelocity = new Vector2(aimDirNor.x * launchForce.x, aimDirNor.y * launchForce.y);
         Vector2 res = playerPos + initVelocity * t + 0.5f * Physics2D.gravity * gravityScale * t * t;
         return res;
+    }
+
+    private float GetFreezeTime()
+    {
+        if (canStopTime)
+            return freezeTime;
+        return 0;
+    }
+
+    private void UnlockThrowSkill()
+    {
+        if (!throwSkillSlot.isLocked)
+        {
+            throwType = ThrowSwordType.Regular;
+            canThrowSword = true;
+        }
+    }
+
+    private void UnlockBounceSkill()
+    {
+        if (!bounceSkillSlot.isLocked)
+            throwType = ThrowSwordType.Bounce;
+    }
+
+    private void UnlockPierceSkill()
+    {
+        if (!pierceSkillSlot.isLocked)
+            throwType = ThrowSwordType.Pierce;
+    }
+
+    private void UnlockSpinSkill()
+    {
+        if (!spinSkillSlot.isLocked)
+            throwType = ThrowSwordType.Spin;
+    }
+
+    private void UnlockTimeStop()
+    {
+        if (!timeStopSkillSlot.isLocked)
+            canStopTime = true;
+    }
+
+    public bool CanThrowSword() => canThrowSword;
+
+    // ReturnCurrentSword returns the sword back to the player
+    public void ReturnCurrentSword()
+    {
+        // Call method to return the sword
+        PlayerManager.instance.player.sword.GetComponent<ThrowSwordController>().
+            ReturnToPlayer();
+    }
+
+    // ResetCooldownTimer helps to assign cooldown to the skill
+    // This function is expected to be called right after the player script clears the sword
+    public void ResetCooldownTimer()
+    {
+        cooldownTimer = cooldown;
     }
 }

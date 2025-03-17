@@ -9,11 +9,12 @@ public class UI_SkillSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
     private Image skillImage;
     private UI ui;
 
-    [SerializeField] public string skillName;
+    public string skillName;
     [TextArea]
-    [SerializeField] public string skillDescription;
+    public string skillDescription;
+    [SerializeField] private int skillPrice;
 
-    [SerializeField] private bool isLocked = true;
+    public bool isLocked = true;
     [SerializeField] private List<UI_SkillSlot> shouldBeUnlocked;
     [SerializeField] private List<UI_SkillSlot> shouldBeLocked;
 
@@ -27,16 +28,16 @@ public class UI_SkillSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
     private void Awake()
     {
         skillImage = GetComponent<Image>();
+        GetComponent<Button>().onClick.AddListener(() => UnlockSkill());
     }
 
     private void Start()
     {
         skillImage.color = lockedColor;
-        GetComponent<Button>().onClick.AddListener(() => UnlockSkill());
         ui = GetComponentInParent<UI>();
     }
 
-    public void UnlockSkill()
+    private void UnlockSkill()
     {
         if (!isLocked) return;
 
@@ -57,9 +58,12 @@ public class UI_SkillSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
             }
         }
 
-        Debug.Log("Unlock skill successfully");
+        if (!PlayerManager.instance.SpendCurrency(skillPrice))
+            return;
+
         isLocked = false;
         skillImage.color = Color.white;
+        Debug.Log("Unlock skill successfully");
     }
 
     public void OnPointerEnter(PointerEventData eventData)
