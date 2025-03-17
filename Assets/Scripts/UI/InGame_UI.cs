@@ -35,6 +35,7 @@ public class InGame_UI : MonoBehaviour
     private void Start()
     {
         playerStats.onHealthChanged += UpdateHealthBarSlider;
+        UpdateHealthBarSlider();
 
         SkillManager sm = SkillManager.instance;
         skillCooldowns.Add(new(dashImg, sm.dashSkill));

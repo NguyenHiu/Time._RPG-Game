@@ -12,7 +12,7 @@ public class UI_SkillSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
     public string skillName;
     [TextArea]
     public string skillDescription;
-    [SerializeField] private int skillPrice;
+    public int skillPrice;
 
     public bool isLocked = true;
     [SerializeField] private List<UI_SkillSlot> shouldBeUnlocked;

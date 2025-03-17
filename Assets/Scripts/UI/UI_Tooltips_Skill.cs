@@ -5,13 +5,7 @@ public class UI_Tooltips_Skill : MonoBehaviour
 {
     [SerializeField] TextMeshProUGUI skillName;
     [SerializeField] TextMeshProUGUI skillDescription;
-
-    private RectTransform rectTrans;
-
-    private void Awake()
-    {
-        rectTrans = GetComponent<RectTransform>();
-    }
+    [SerializeField] TextMeshProUGUI skillCost;
 
     private void Start()
     {
@@ -24,6 +18,7 @@ public class UI_Tooltips_Skill : MonoBehaviour
         {
             skillName.text = skillSlot.skillName;
             skillDescription.text = skillSlot.skillDescription;
+            skillCost.text = "Cost: " + skillSlot.skillPrice;
             CorrectPosition();
             gameObject.SetActive(true);
         }

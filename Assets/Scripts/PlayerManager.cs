@@ -1,9 +1,11 @@
+using System;
 using UnityEngine;
 
 public class PlayerManager : MonoBehaviour
 {
     public static PlayerManager instance;
     public Player player;
+    public Action OnCurrencyUpdated;
 
     public int currency;
     public void Awake()
@@ -19,6 +21,7 @@ public class PlayerManager : MonoBehaviour
             return false;
 
         currency -= _price;
+        OnCurrencyUpdated?.Invoke();
         return true;
     }
 }
