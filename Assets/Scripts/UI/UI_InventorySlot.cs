@@ -61,7 +61,7 @@ public class UI_InventorySlot : MonoBehaviour, IPointerDownHandler, IPointerEnte
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        if (itemData != null)
+        if (itemData != null && itemData.data.itemType == ItemType.Equipment)
             ui.equipmentTooltips.EnableTooltips(itemData.data as EquipmentItemData);
     }
 
