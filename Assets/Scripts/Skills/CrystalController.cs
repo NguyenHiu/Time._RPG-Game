@@ -42,7 +42,7 @@ public class CrystalController : MonoBehaviour
     public void TrySwapCrystal(Vector2 playerPos)
     {
         // Can't swap in the explosion
-        if (isExploding) 
+        if (isExploding)
             return;
 
         Vector2 myPos = transform.position;

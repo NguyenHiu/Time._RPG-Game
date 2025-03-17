@@ -66,7 +66,7 @@ public class InGame_UI : MonoBehaviour
 
     private void Update()
     {
-        foreach(SkillCooldown skillCD in skillCooldowns)
+        foreach (SkillCooldown skillCD in skillCooldowns)
         {
             skillCD.timer -= Time.deltaTime;
             UpdateSkill(skillCD.img, skillCD.timer, skillCD.cooldown);

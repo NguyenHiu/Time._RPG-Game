@@ -17,7 +17,7 @@ public class PlayerManager : MonoBehaviour
 
     public bool SpendCurrency(int _price)
     {
-        if (currency < _price) 
+        if (currency < _price)
             return false;
 
         currency -= _price;

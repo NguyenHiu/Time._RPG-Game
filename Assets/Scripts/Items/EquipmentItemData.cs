@@ -119,7 +119,7 @@ public class EquipmentItemData : ItemData
         AddItemDescription(fireDamage, "Fire Damage");
         AddItemDescription(iceDamage, "Ice Damage");
         AddItemDescription(lightingDamage, "Lighting Damage");
-        
+
         while (line < 5)
         {
             sb.AppendLine();

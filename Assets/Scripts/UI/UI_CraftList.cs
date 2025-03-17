@@ -22,7 +22,7 @@ public class UI_CraftList : MonoBehaviour, IPointerDownHandler
 
     private void CreateCraftList()
     {
-        ClearCraftList(); 
+        ClearCraftList();
         foreach (ItemData item in items)
         {
             GameObject slotObj = Instantiate(craftSlotPrefab, craftSlotsParent);

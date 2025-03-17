@@ -100,20 +100,20 @@ public class CrystalSkill : Skill
                         damage, canShock
                     );
 
-                if (canSwap) 
+                if (canSwap)
                     swapped = false;
             }
             else if (canSwap && !swapped)
             {
                 // Mark that this crystal has already swapped
                 swapped = true;
-                
+
                 // Calculate crystal position
                 Vector2 crystalPos = currentCrystal.transform.position;
                 crystalPos.y += 0.5f;
                 Vector2 playerPos = PlayerManager.instance.player.transform.position;
                 playerPos.y -= 0.5f;
-                
+
                 // Try to swap
                 currentCrystal.GetComponent<CrystalController>().TrySwapCrystal(playerPos);
             }

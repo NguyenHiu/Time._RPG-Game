@@ -1,8 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -13,8 +9,8 @@ public class UI_CraftWindow : MonoBehaviour
     [SerializeField] private TextMeshProUGUI itemName;
     [SerializeField] private TextMeshProUGUI itemDescription;
     [SerializeField] private Image[] materialImages; // to be assigned manually
-    [SerializeField] private Button craftButton; 
-    
+    [SerializeField] private Button craftButton;
+
     public void UpdateCraftItem(EquipmentItemData item)
     {
         craftButton.onClick.RemoveAllListeners();
@@ -43,7 +39,7 @@ public class UI_CraftWindow : MonoBehaviour
     private void ClearCurrentItem()
     {
         // Hide all materials
-        foreach(Image img in materialImages)
+        foreach (Image img in materialImages)
         {
             img.color = Color.clear;
             img.GetComponentInChildren<TextMeshProUGUI>().color = Color.clear;
