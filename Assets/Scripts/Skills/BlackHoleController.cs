@@ -80,6 +80,7 @@ public class BlackHoleController : MonoBehaviour
                 isShrinking = false;
                 Destroy(gameObject);
                 PlayerManager.instance.player.SetTransparent(false);
+                SkillManager.instance.blackholeSkill.TriggerCooldown();
             }
         }
     }

@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   triggeredHealth: 10
   slowDownDuration: 10
-  slowDownPercent: 0.3
+  slowDownPercent: 0.816
   radius: 3

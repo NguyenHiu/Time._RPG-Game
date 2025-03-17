@@ -1,19 +1,38 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
 
+public enum StatType
+{
+    strength,
+    agility,
+    intelligent,
+    vitality,
+    maxHP,
+    armor,
+    evasion,
+    magicResistance,
+    damage,
+    critChance,
+    critPower,
+    fireDamage,
+    iceDamage,
+    lightingDamage
+}
 public class StatsController : MonoBehaviour
 {
     [Header("Major Stats")]
     public Stat strength;    // 1 point --> +1 damage; +1% crit.damage
     public Stat agility;     // 1 point --> +1 evasion; +1% crit.chance
     public Stat intelligent; // 1 point --> +1 magic damage; +3% magic resistance
-    public Stat vitality;    // 1 point --> +3 or +5 heath points
+    public Stat vitality;    // 1 point --> +5 heath points
 
     [Header("Defensive Stats")]
     public Stat maxHP;
     public Stat armor;
     public Stat evasion;
+    public Stat magicResistance;
 
     [Header("Offensive Stats")]
     public Stat damage;
@@ -23,7 +42,7 @@ public class StatsController : MonoBehaviour
     [Header("Magic Stats")]
     public Stat fireDamage;
     public Stat iceDamage;
-    public Stat lightningDamage;
+    public Stat lightingDamage;
 
     public float burnLastTime;
     public bool isBurned = false;
@@ -144,7 +163,7 @@ public class StatsController : MonoBehaviour
         ctrl.entityFX.StartCoroutine(nameof(entityFX.FreezingFxFor), ctrl.chillTimer);
     }
 
-    public virtual void DoLightningDamage(StatsController ctrl)
+    public virtual void DoLightingDamage(StatsController ctrl)
     {
         // Update shocking data
         ctrl.isShocked = true;
@@ -152,7 +171,7 @@ public class StatsController : MonoBehaviour
         float slowPercentage = .1f;
         ctrl.entity.SlowBy(slowPercentage, ctrl.shockTimer);
 
-        float finalDamage = AppliedMagicResistance(ctrl, lightningDamage.GetValue());
+        float finalDamage = AppliedMagicResistance(ctrl, lightingDamage.GetValue());
         ctrl.TakeDamage(Mathf.RoundToInt(finalDamage));
 
         // Apply FX
@@ -165,15 +184,15 @@ public class StatsController : MonoBehaviour
         List<string> abilities = new();
         if (fireDamage.GetValue() > 0) abilities.Add("fire");
         if (iceDamage.GetValue() > 0) abilities.Add("ice");
-        if (lightningDamage.GetValue() > 0) abilities.Add("lightning");
+        if (lightingDamage.GetValue() > 0) abilities.Add("lighting");
 
         string rdAffect = abilities[Random.Range(0, abilities.Count)];
         if (rdAffect == "fire")
             DoFireDamage(ctrl);
         else if (rdAffect == "ice")
             DoIceDamage(ctrl);
-        else if (rdAffect == "lightning")
-            DoLightningDamage(ctrl);
+        else if (rdAffect == "lighting")
+            DoLightingDamage(ctrl);
     }
 
     protected virtual float AppliedMagicResistance(StatsController ctrl, float magicDamage)
@@ -273,4 +292,40 @@ public class StatsController : MonoBehaviour
         return isDeath;
     }
 
+    public Stat GetStat(StatType type)
+    {
+        switch (type)
+        {
+            case StatType.strength:
+                return strength;
+            case StatType.agility:
+                return agility;
+            case StatType.intelligent:
+                return intelligent;
+            case StatType.vitality:
+                return vitality;
+            case StatType.maxHP:
+                return maxHP;
+            case StatType.armor:
+                return armor;
+            case StatType.evasion:
+                return evasion;
+            case StatType.magicResistance:
+                return magicResistance;
+            case StatType.damage:
+                return damage;
+            case StatType.critChance:
+                return critChance;
+            case StatType.critPower:
+                return critPower;
+            case StatType.fireDamage:
+                return fireDamage;
+            case StatType.iceDamage:
+                return iceDamage;
+            case StatType.lightingDamage:
+                return lightingDamage;
+            default: break;
+        }
+        return null;
+    }
 }

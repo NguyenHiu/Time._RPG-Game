@@ -13,9 +13,9 @@ public class BlackHoleSkill : Skill
     [SerializeField] private int attackTimes = 4;
     private GameObject blackHoleObj;
 
-    public override bool TryUseSkill()
+    public override bool TryUseSkill(bool triggerCooldown = false)
     {
-        return base.TryUseSkill();
+        return base.TryUseSkill(triggerCooldown);
     }
 
     protected override void UseSkill()
@@ -40,4 +40,8 @@ public class BlackHoleSkill : Skill
         return blackHoleObj;
     }
 
+    public void TriggerCooldown()
+    {
+        TriggerCooldownUpdate();
+    }
 }

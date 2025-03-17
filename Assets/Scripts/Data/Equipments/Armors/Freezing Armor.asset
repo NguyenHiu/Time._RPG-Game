@@ -10,10 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1e5b665384586a8418bf97e4c71fa5b0, type: 3}
-  m_Name: Stolen Sword
+  m_Name: Freezing Armor
   m_EditorClassIdentifier: 
-  itemEffects: []
-  strength: 6
+  itemType: 1
+  itemName: Freezing Armor
+  icon: {fileID: -1871269579, guid: a9ca9a41598dd2e44b125928045c518f, type: 3}
+  equipmentType: 1
+  itemCooldown: 0
+  itemEffects:
+  - {fileID: 11400000, guid: 4a32973bd68acbf43a6766f85b73e78d, type: 2}
+  strength: 0
   agility: 0
   intelligent: 0
   vitality: 0
@@ -25,13 +31,11 @@ MonoBehaviour:
   critPower: 0
   fireDamage: 0
   iceDamage: 0
-  lightningDamage: 0
+  lightingDamage: 0
   requiredMaterials:
-  - data: {fileID: 11400000, guid: 262a67c2fd0d23b44a73e6a5d5f8cfbe, type: 2}
+  - data: {fileID: 11400000, guid: edcd0bce7420ad143b3245fdbc3180d3, type: 2}
     stack: 1
-  - data: {fileID: 11400000, guid: 015912ae1cf2dba4eb9c87feb48ebb7e, type: 2}
+  - data: {fileID: 11400000, guid: 262a67c2fd0d23b44a73e6a5d5f8cfbe, type: 2}
     stack: 2
-  itemType: 1
-  itemName: Stolen Sword
-  icon: {fileID: 1526008332, guid: a9ca9a41598dd2e44b125928045c518f, type: 3}
-  equipmentType: 0
+  - data: {fileID: 11400000, guid: 7e4d7fe6490d52c458917a6e9d665848, type: 2}
+    stack: 2

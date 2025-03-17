@@ -35,12 +35,12 @@ public class PlayerGroundedState : PlayerState
             stateMachine.ChangeState(player.primaryAttackState);
         }
 
-        if (Input.GetKeyDown(KeyCode.E))
+        if (Input.GetKeyDown(KeyCode.Q) && SkillManager.instance.parrySkill.CanParry())
         {
             stateMachine.ChangeState(player.counterAttackState);
         }
 
-        if (Input.GetKeyDown(KeyCode.Mouse1) && TryCreateSword() && !player.isBusy)
+        if (Input.GetKeyDown(KeyCode.Mouse1) && CanThrowSword() && !player.isBusy)
         {
             stateMachine.ChangeState(player.aimSwordState);
         }
@@ -51,16 +51,24 @@ public class PlayerGroundedState : PlayerState
         }
     }
 
-    // TryCreateSword returns true if player can create new sword
+    // CanCreateSword returns true if player can create new sword
     //                returns false and retrieves the existing sword if it exists
-    private bool TryCreateSword()
+    private bool CanThrowSword()
     {
+        // Check if the skill is cooldown
+        if (!SkillManager.instance.throwSwordSkill.CanUseSkill())
+            return false;
+
+        // Check if the throw skill has already unlocked
+        if (!SkillManager.instance.throwSwordSkill.CanThrowSword())
+            return false;
+
         // If the sword has already existed
         if (player.sword == null)
             return true;
 
         // Retrieve the existing sword
-        player.sword.GetComponent<ThrowSwordController>().ReturnToPlayer();
+        SkillManager.instance.throwSwordSkill.ReturnCurrentSword();
         return false;
     }
 }

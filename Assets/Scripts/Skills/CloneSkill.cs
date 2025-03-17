@@ -27,7 +27,12 @@ public class CloneSkill : Skill
         controller.SetupClone(clonePos, cloneDuration, canAttack, canCreateAnotherClone, chanceToCreateAnotherClone, damage);
     }
 
-    public IEnumerator CreateCloneInCounter(Vector2 clonePos)
+    public void CreateMirageAttack(Vector2 clonePos)
+    {
+        StartCoroutine(CreateCloneInCounter(clonePos));
+    }
+
+    private IEnumerator CreateCloneInCounter(Vector2 clonePos)
     {
         if (createCloneInCounter)
         {

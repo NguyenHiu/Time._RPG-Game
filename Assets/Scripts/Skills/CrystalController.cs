@@ -16,6 +16,8 @@ public class CrystalController : MonoBehaviour
     private float damage;
     private bool canShock;
 
+    private bool isExploding = false;
+
     private void Awake()
     {
         anim = GetComponent<Animator>();
@@ -35,6 +37,17 @@ public class CrystalController : MonoBehaviour
         _isGrowing = false;
         damage = _damage;
         canShock = _canShock;
+    }
+
+    public void TrySwapCrystal(Vector2 playerPos)
+    {
+        // Can't swap in the explosion
+        if (isExploding) 
+            return;
+
+        Vector2 myPos = transform.position;
+        transform.position = playerPos;
+        PlayerManager.instance.player.transform.position = myPos;
     }
 
     private void Update()
@@ -77,12 +90,14 @@ public class CrystalController : MonoBehaviour
         {
             if (obj.TryGetComponent<Enemy>(out var e))
             {
+                isExploding = true;
+
                 // Take damage from explosive
                 e.statCtrl.TakeDamage(Mathf.RoundToInt(damage));
 
                 // Take magical damage
                 if (canShock)
-                    PlayerManager.instance.player.statCtrl.DoLightningDamage(e.statCtrl);
+                    PlayerManager.instance.player.statCtrl.DoLightingDamage(e.statCtrl);
             }
         }
     }

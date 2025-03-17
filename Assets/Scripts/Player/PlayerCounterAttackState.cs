@@ -34,7 +34,7 @@ public class PlayerCounterAttackState : PlayerState
                 stateTimer = 10;
                 player.anim.SetBool("SuccessfulCounterAttack", true);
                 Vector2 clonePos = player.transform.position + new Vector3(player.facingDir * 2.5f, 0f);
-                SkillManager.instance.cloneSkill.StartCoroutine("CreateCloneInCounter", clonePos);
+                SkillManager.instance.parrySkill.CreateMirageAttack(clonePos);
             }
         }
 

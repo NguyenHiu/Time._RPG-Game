@@ -34,7 +34,7 @@ public class EnemyStats : StatsController
         Modify(critPower);
         Modify(fireDamage);
         Modify(iceDamage);
-        Modify(lightningDamage);
+        Modify(lightingDamage);
     }
 
     protected virtual void Modify(Stat _stat)
