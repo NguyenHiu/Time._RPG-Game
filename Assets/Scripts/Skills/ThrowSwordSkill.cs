@@ -227,5 +227,6 @@ public class ThrowSwordSkill : Skill
     public void ResetCooldownTimer()
     {
         cooldownTimer = cooldown;
+        TriggerCooldownUpdate();
     }
 }

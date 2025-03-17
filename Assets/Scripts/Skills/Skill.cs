@@ -1,9 +1,11 @@
+using System;
 using UnityEngine;
 
 public class Skill : MonoBehaviour
 {
     [SerializeField] protected float cooldown;
     protected float cooldownTimer;
+    public event Action<float> OnCooldownUpdated;
 
     protected virtual void Start() { }
 
@@ -12,16 +14,26 @@ public class Skill : MonoBehaviour
         cooldownTimer -= Time.deltaTime;
     }
 
-    public virtual bool TryUseSkill()
+    public virtual bool TryUseSkill(bool triggerCooldown = true)
     {
         if (cooldownTimer < 0)
         {
             UseSkill();
-            cooldownTimer = cooldown;
+            if (triggerCooldown)
+            {
+                cooldownTimer = cooldown;
+                OnCooldownUpdated?.Invoke(cooldown);
+            }
             return true;
         }
 
         return false;
+    }
+
+    protected virtual void TriggerCooldownUpdate()
+    {
+        cooldownTimer = cooldown;
+        OnCooldownUpdated?.Invoke(cooldown);
     }
 
     public virtual bool CanUseSkill() => cooldownTimer < 0;

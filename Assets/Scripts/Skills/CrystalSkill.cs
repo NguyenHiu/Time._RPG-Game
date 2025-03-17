@@ -70,7 +70,7 @@ public class CrystalSkill : Skill
         TryUseMultiCrystals();
     }
 
-    public override bool TryUseSkill()
+    public override bool TryUseSkill(bool triggerCooldown = true)
     {
         bool res = base.TryUseSkill();
 

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -27,8 +28,10 @@ public class Inventory : MonoBehaviour
     private UI_StatSlot[] statSlots;
 
     private float lastTimeUsedFlask = 0;
-    private float lastTimeUsedArmor = 0;
     private float flaskCooldown = 0;
+    public Action<float> OnFlaskCooldownUpdated;
+
+    private float lastTimeUsedArmor = 0;
     private float armorCooldown = 0;
 
     private void Awake()
@@ -264,6 +267,7 @@ public class Inventory : MonoBehaviour
                 {
                     flaskCooldown = item.Key.itemCooldown;
                     lastTimeUsedFlask = Time.time;
+                    OnFlaskCooldownUpdated?.Invoke(flaskCooldown);
                     item.Key.ExecuteEffects(null);
                 }
             }

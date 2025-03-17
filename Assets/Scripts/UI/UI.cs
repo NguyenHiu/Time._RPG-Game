@@ -6,6 +6,7 @@ public class UI : MonoBehaviour
     public GameObject skillTreeUI;
     public GameObject craftUI;
     public GameObject optionsUI;
+    public GameObject InGameUI;
     public UI_Tooltips_Equipment equipmentTooltips;
     public UI_Tooltips_Stat statTooltips;
     public UI_Tooltips_Skill skillTooltips;
@@ -18,7 +19,7 @@ public class UI : MonoBehaviour
     }
     private void Start()
     {
-        SwitchTo(null);
+        SwitchTo(InGameUI);
         equipmentTooltips.gameObject.SetActive(false);
         statTooltips.gameObject.SetActive(false);
     }
@@ -58,6 +59,7 @@ public class UI : MonoBehaviour
         if (_menu != null && _menu.activeInHierarchy)
         {
             _menu.SetActive(false);
+            InGameUI.SetActive(true);
             return;
         }
 
