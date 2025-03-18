@@ -81,6 +81,16 @@ public class CrystalSkill : Skill
         return res;
     }
 
+    protected override void CheckLockStatus()
+    {
+        base.CheckLockStatus();
+
+        UnlockCrystal();
+        UnlockShockingCrystal();
+        UnlockSwappingCrystal();
+        UnlockMultiCrystal();
+    }
+
     private void TryUseSingleCrystal()
     {
         if (!canUseMultiCrystals)

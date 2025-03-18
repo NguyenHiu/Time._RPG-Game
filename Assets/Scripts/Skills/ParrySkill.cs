@@ -19,6 +19,14 @@ public class ParrySkill : Skill
         createMirageSkillSlot.GetComponent<Button>().onClick.AddListener(() => UnlockCreateMirage());
     }
 
+    protected override void CheckLockStatus()
+    {
+        base.CheckLockStatus();
+
+        UnlockParry();
+        UnlockCreateMirage();
+    }
+
     public bool CanParry() => canParry;
     public void CreateMirageAttack(Vector2 pos)
     {

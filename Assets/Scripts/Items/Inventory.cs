@@ -1,13 +1,22 @@
 using System;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
+using static UnityEditor.Progress;
 
-public class Inventory : MonoBehaviour
+[System.Serializable]
+public struct StartedItem
+{
+    public ItemData item;
+    public int stack;
+}
+
+public class Inventory : MonoBehaviour, IGameData
 {
     public static Inventory instance;
 
     [Header("Started Pack")]
-    [SerializeField] private List<ItemData> startedPack;
+    [SerializeField] private List<StartedItem> startedPack;
 
     [Header("Inventory")]
     [SerializeField] private List<InventoryItem> inventoryItems;
@@ -55,8 +64,8 @@ public class Inventory : MonoBehaviour
         equipmentSlots = equipmentSlotParent.GetComponentsInChildren<UI_EquipmentSlot>();
         statSlots = statSlotsParent.GetComponentsInChildren<UI_StatSlot>();
 
-        foreach (ItemData item in startedPack)
-            AddItem(item);
+        foreach (StartedItem item in startedPack)
+            AddItem(item.item, item.stack);
     }
 
     public void EquipItem(ItemData _newItem)
@@ -74,6 +83,7 @@ public class Inventory : MonoBehaviour
 
         if (existingData != null)
         {
+            Debug.Log(">> I THINK SOMETHIGN ISBROKEN");
             Unequip(existingData as EquipmentItemData);
             AddItem(existingData);
         }
@@ -83,7 +93,7 @@ public class Inventory : MonoBehaviour
         equippedItems.Add(newEquipItem);
         equippedDict.Add(_newEquipmentItemData, newEquipItem);
 
-        RemoveItem(_newItem);
+        UpdateInventory();
     }
 
     public void Unequip(EquipmentItemData existingData)
@@ -135,39 +145,42 @@ public class Inventory : MonoBehaviour
         }
     }
 
-    public void AddItem(ItemData item)
+    public void AddItem(ItemData item, int amount = 1)
     {
         if (item.itemType == ItemType.Equipment && !IsInventoryFull())
-            AddToInventory(item);
+            AddToInventory(item, amount);
         else if (item.itemType == ItemType.Material)
-            AddToStash(item);
+            AddToStash(item, amount);
 
         UpdateInventory();
     }
 
-    private void AddToInventory(ItemData item)
+    private void AddToInventory(ItemData item, int amount = 1)
     {
         if (inventoryDict.TryGetValue(item, out InventoryItem inventoryItem))
         {
-            inventoryItem.AddStack();
+            inventoryItem.AddStack(amount);
         }
         else
         {
+            Debug.Log("AddToInventory, name: " + item.name + "; value: " + amount);
             inventoryItem = new InventoryItem(item);
+            inventoryItem.stack = amount;
             inventoryItems.Add(inventoryItem);
             inventoryDict.Add(item, inventoryItem);
         }
     }
 
-    private void AddToStash(ItemData item)
+    private void AddToStash(ItemData item, int amount = 1)
     {
         if (stashDict.TryGetValue(item, out InventoryItem stashItem))
         {
-            stashItem.AddStack();
+            stashItem.AddStack(amount);
         }
         else
         {
             stashItem = new InventoryItem(item);
+            stashItem.stack = amount;
             stashItems.Add(stashItem);
             stashDict.Add(item, stashItem);
         }
@@ -293,5 +306,54 @@ public class Inventory : MonoBehaviour
     public bool IsInventoryFull()
     {
         return inventoryItems.Count >= inventorySlots.Length;
+    }
+
+    public void SaveData(ref GameData gameData)
+    {
+        gameData.inventory.Clear();
+
+        foreach (InventoryItem item in inventoryItems)
+            gameData.inventory.Add(item.data.itemID, item.stack);
+
+        foreach (InventoryItem item in stashItems)
+            gameData.inventory.Add(item.data.itemID, item.stack);
+
+        gameData.equipments.Clear();
+        foreach (InventoryItem item in equippedItems)
+            gameData.equipments.Add(item.data.itemID);
+    }
+
+    public void LoadData(GameData gameData)
+    {
+        Dictionary<String, ItemData> assetDict = new();
+        string[] assetIDs = AssetDatabase.FindAssets("", new[] { "Assets/Data/Items" });
+        foreach (string id in assetIDs)
+        {
+            string assetPath = AssetDatabase.GUIDToAssetPath(id);
+            ItemData asset = AssetDatabase.LoadAssetAtPath<ItemData>(assetPath);
+            assetDict.Add(id, asset);
+        }
+
+        foreach (KeyValuePair<String, int> item in gameData.inventory)
+        {
+            if (!assetDict.ContainsKey(item.Key))
+            {
+                Debug.LogError("Invalid Item ID: " + item.Key);
+                return;
+            }
+
+            AddItem(assetDict[item.Key], item.Value);
+        }
+
+        foreach (string id in gameData.equipments)
+        {
+            if (!assetDict.ContainsKey(id))
+            {
+                Debug.LogError("Invalid Item ID: " + id);
+                return;
+            }
+
+            EquipItem(assetDict[id]);
+        }
     }
 }

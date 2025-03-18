@@ -12,6 +12,6 @@ public class InventoryItem
         AddStack();
     }
 
-    public void AddStack() => this.stack++;
+    public void AddStack(int amount = 1) => this.stack += amount;
     public void RemoveStack(int amount = 1) => this.stack -= amount;
 }
