@@ -35,6 +35,14 @@ public class DashSkill : Skill
             canDash = true;
     }
 
+    protected override void CheckLockStatus()
+    {
+        base.CheckLockStatus();
+
+        UnlockDash();
+        UnlockLeaveMirage();
+    }
+
     private void UnlockLeaveMirage()
     {
         if (!leaveMirageSkillSlot.isLocked)

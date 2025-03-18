@@ -99,6 +99,17 @@ public class ThrowSwordSkill : Skill
         }
     }
 
+    protected override void CheckLockStatus()
+    {
+        base.CheckLockStatus();
+
+        UnlockThrowSkill();
+        UnlockBounceSkill();
+        UnlockPierceSkill();
+        UnlockSpinSkill();
+        UnlockTimeStop();
+    }
+
     // SetupGravity is used to setup the gravity based on the throw type
     private void SetupGravity()
     {

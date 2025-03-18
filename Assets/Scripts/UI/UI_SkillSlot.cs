@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class UI_SkillSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+public class UI_SkillSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IGameData
 {
     private Image skillImage;
     private UI ui;
@@ -32,7 +32,11 @@ public class UI_SkillSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
 
     private void Start()
     {
-        skillImage.color = lockedColor;
+        if (!isLocked)
+            skillImage.color = Color.white;
+        else
+            skillImage.color = lockedColor;
+
         ui = GetComponentInParent<UI>();
     }
 
@@ -73,5 +77,22 @@ public class UI_SkillSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
     public void OnPointerExit(PointerEventData eventData)
     {
         ui.skillTooltips.DisableTooltips();
+    }
+
+    public void SaveData(ref GameData gameData)
+    {
+        if (gameData.skills.ContainsKey(skillName))
+            gameData.skills[skillName] = isLocked;
+        else
+            gameData.skills.Add(skillName, isLocked);
+    }
+
+    // Auto set the isLocked to true if the data doesn't contain this skill infor
+    public void LoadData(GameData gameData)
+    {
+        if (gameData.skills.ContainsKey(skillName))
+            isLocked = gameData.skills[skillName];
+        else
+            isLocked = true;
     }
 }

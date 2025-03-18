@@ -17,12 +17,15 @@ public class UI_InventorySlot : MonoBehaviour, IPointerDownHandler, IPointerEnte
 
     public virtual void OnPointerDown(PointerEventData eventData)
     {
-        if (itemData != null)
+        if (itemData != null && itemData.data != null)
         {
             if (Input.GetKey(KeyCode.LeftControl))
                 Inventory.instance.RemoveItem(itemData.data);
             else if (itemData.data.itemType == ItemType.Equipment)
+            {
                 Inventory.instance.EquipItem(itemData.data);
+                Inventory.instance.RemoveItem(itemData.data);
+            }
 
             ui.equipmentTooltips.DisableTooltips();
         }
@@ -61,7 +64,11 @@ public class UI_InventorySlot : MonoBehaviour, IPointerDownHandler, IPointerEnte
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        if (itemData != null && itemData.data.itemType == ItemType.Equipment)
+        if (
+            itemData != null && 
+            itemData.data != null &&
+            itemData.data.itemType == ItemType.Equipment
+        )
             ui.equipmentTooltips.EnableTooltips(itemData.data as EquipmentItemData);
     }
 

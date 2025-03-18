@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public class PlayerManager : MonoBehaviour
+public class PlayerManager : MonoBehaviour, IGameData
 {
     public static PlayerManager instance;
     public Player player;
@@ -13,6 +13,16 @@ public class PlayerManager : MonoBehaviour
         if (instance == null)
             instance = this;
         else Destroy(instance.gameObject);
+    }
+
+    public void LoadData(GameData gameData)
+    {
+        currency = gameData.currency;
+    }
+
+    public void SaveData(ref GameData gameData)
+    {
+        gameData.currency = currency;
     }
 
     public bool SpendCurrency(int _price)

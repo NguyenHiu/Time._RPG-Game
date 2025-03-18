@@ -7,12 +7,17 @@ public class Skill : MonoBehaviour
     protected float cooldownTimer;
     public event Action<float> OnCooldownUpdated;
 
-    protected virtual void Start() { }
+    protected virtual void Start()
+    {
+        CheckLockStatus();
+    }
 
     protected virtual void Update()
     {
         cooldownTimer -= Time.deltaTime;
     }
+
+    protected virtual void CheckLockStatus() { }
 
     public virtual bool TryUseSkill(bool triggerCooldown = true)
     {
