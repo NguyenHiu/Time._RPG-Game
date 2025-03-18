@@ -65,7 +65,7 @@ public class UI_InventorySlot : MonoBehaviour, IPointerDownHandler, IPointerEnte
     public void OnPointerEnter(PointerEventData eventData)
     {
         if (
-            itemData != null && 
+            itemData != null &&
             itemData.data != null &&
             itemData.data.itemType == ItemType.Equipment
         )
