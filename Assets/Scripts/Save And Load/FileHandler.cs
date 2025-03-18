@@ -17,6 +17,21 @@ public class FileHandler
         secret = _secret;
     }
 
+    public void Delete()
+    {
+        string fullPath = Path.Combine(path, fileName);
+        try
+        {
+            if (File.Exists(fullPath))
+                File.Delete(fullPath);
+        }
+        catch (Exception e)
+        {
+            Debug.LogError("Error while trying to delete file: " + fullPath + "\n" + e);
+        }
+    }
+
+
     public void Save(GameData gameData)
     {
         string fullPath = Path.Combine(path, fileName);

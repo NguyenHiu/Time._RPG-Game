@@ -38,6 +38,16 @@ public class SaveManager : MonoBehaviour
         return new List<IGameData>(data);
     }
 
+    public void Delete()
+    {
+        fileHandler.Delete();
+    }
+
+    public bool HasGameData()
+    {
+        return fileHandler.Load() != null;
+    }
+
     public void NewGame()
     {
         gameData = new GameData();

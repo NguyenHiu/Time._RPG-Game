@@ -42,6 +42,9 @@ public class Inventory : MonoBehaviour, IGameData
     private float lastTimeUsedArmor = 0;
     private float armorCooldown = 0;
 
+    private List<InventoryItem> loadedItems = new();
+    private List<ItemData> loadedEquipItems = new();
+
     private void Awake()
     {
         inventoryItems = new List<InventoryItem>();
@@ -65,6 +68,12 @@ public class Inventory : MonoBehaviour, IGameData
 
         foreach (StartedItem item in startedPack)
             AddItem(item.item, item.stack);
+
+        foreach (InventoryItem item in loadedItems)
+            AddItem(item.data, item.stack);
+
+        foreach (ItemData item in loadedEquipItems)
+            EquipItem(item);
     }
 
     public void EquipItem(ItemData _newItem)
@@ -341,7 +350,7 @@ public class Inventory : MonoBehaviour, IGameData
                 return;
             }
 
-            AddItem(assetDict[item.Key], item.Value);
+            loadedItems.Add(new(assetDict[item.Key]) { stack = item.Value });
         }
 
         foreach (string id in gameData.equipments)
@@ -352,7 +361,7 @@ public class Inventory : MonoBehaviour, IGameData
                 return;
             }
 
-            EquipItem(assetDict[id]);
+            loadedEquipItems.Add(assetDict[id]);
         }
     }
 }
