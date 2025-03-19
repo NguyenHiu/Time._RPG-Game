@@ -4,6 +4,12 @@
 
 I have poured my passion for game development into Time, and it has been an incredible learning experience. Through this project, I have gained a deeper understanding of Unity, C#, and various game development concepts. I am excited to continue improving and expanding Time, adding new features, and refining existing ones.
 
+## Development Status
+
+Time is currently under development. I am continuously working on adding new features, improving gameplay mechanics, and enhancing the overall user experience. Stay tuned for updates and new content!
+
+Thank you for checking out Time! I hope you enjoy playing it as much as I enjoyed creating it.
+
 ## Features
 
 - Save and Load System
@@ -40,9 +46,3 @@ Check out the video demos of the features in action:
 ### Inventory and Stats
 [Inventory and Stats](https://github.com/user-attachments/assets/5c6d8f93-3397-48f6-93dc-eb4203c88d3b)
 
-
-## Development Status
-
-Time is currently under development. I am continuously working on adding new features, improving gameplay mechanics, and enhancing the overall user experience. Stay tuned for updates and new content!
-
-Thank you for checking out Time! I hope you enjoy playing it as much as I enjoyed creating it.
