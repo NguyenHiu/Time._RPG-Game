@@ -42,6 +42,7 @@ public class Inventory : MonoBehaviour, IGameData
     private float lastTimeUsedArmor = 0;
     private float armorCooldown = 0;
 
+    public Dictionary<string, ItemData> assetDict;
     private List<InventoryItem> loadedItems = new();
     private List<ItemData> loadedEquipItems = new();
 
@@ -333,15 +334,6 @@ public class Inventory : MonoBehaviour, IGameData
 
     public void LoadData(GameData gameData)
     {
-        Dictionary<String, ItemData> assetDict = new();
-        string[] assetIDs = AssetDatabase.FindAssets("", new[] { "Assets/Data/Items" });
-        foreach (string id in assetIDs)
-        {
-            string assetPath = AssetDatabase.GUIDToAssetPath(id);
-            ItemData asset = AssetDatabase.LoadAssetAtPath<ItemData>(assetPath);
-            assetDict.Add(id, asset);
-        }
-
         foreach (KeyValuePair<String, int> item in gameData.inventory)
         {
             if (!assetDict.ContainsKey(item.Key))
@@ -364,4 +356,23 @@ public class Inventory : MonoBehaviour, IGameData
             loadedEquipItems.Add(assetDict[id]);
         }
     }
+
+#if UNITY_EDITOR
+    [ContextMenu("Fill up item database")]
+
+    private void FillupItemDatabase() => assetDict = GetItemDatabase();
+
+    private Dictionary<string, ItemData> GetItemDatabase()
+    {
+        Dictionary<string, ItemData> assetDict = new();
+        string[] assetIDs = AssetDatabase.FindAssets("", new[] { "Assets/Data/Items" });
+        foreach (string id in assetIDs)
+        {
+            string assetPath = AssetDatabase.GUIDToAssetPath(id);
+            ItemData asset = AssetDatabase.LoadAssetAtPath<ItemData>(assetPath);
+            assetDict.Add(id, asset);
+        }
+        return assetDict;
+    }
+#endif
 }

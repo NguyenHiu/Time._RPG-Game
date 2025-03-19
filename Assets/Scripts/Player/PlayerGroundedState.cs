@@ -30,7 +30,7 @@ public class PlayerGroundedState : PlayerState
             stateMachine.ChangeState(player.jumpState);
         }
 
-        if (Input.GetKeyDown(KeyCode.Mouse0) && player.IsGroundDetected())
+        if (Input.GetKeyDown(KeyCode.Mouse0) && player.IsGroundDetected() && !PlayerManager.instance.isInMenu)
         {
             stateMachine.ChangeState(player.primaryAttackState);
         }

@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class UI : MonoBehaviour
@@ -6,11 +7,13 @@ public class UI : MonoBehaviour
     public GameObject skillTreeUI;
     public GameObject craftUI;
     public GameObject optionsUI;
-    public GameObject InGameUI;
+    public GameObject inGameUI;
     public UI_Tooltips_Equipment equipmentTooltips;
     public UI_Tooltips_Stat statTooltips;
     public UI_Tooltips_Skill skillTooltips;
     public UI_CraftWindow craftWindow;
+    public UI_Fade fadeScreen;
+    public UI_DieScreen dieScreen;
 
     private void Awake()
     {
@@ -19,7 +22,8 @@ public class UI : MonoBehaviour
     }
     private void Start()
     {
-        SwitchTo(InGameUI);
+        SwitchTo(inGameUI);
+        fadeScreen.gameObject.SetActive(true);
         equipmentTooltips.gameObject.SetActive(false);
         statTooltips.gameObject.SetActive(false);
     }
@@ -39,11 +43,21 @@ public class UI : MonoBehaviour
     public void SwitchTo(GameObject _menu)
     {
         for (int i = 0; i < transform.childCount; i++)
+        {
             transform.GetChild(i).gameObject.SetActive(false);
+            if (PlayerManager.instance)
+                PlayerManager.instance.isInMenu = false;
+        }
 
         if (_menu != null)
         {
             _menu.SetActive(true);
+
+            if (PlayerManager.instance != null)
+            {
+                PlayerManager.instance.isInMenu = true;
+                Debug.Log("Is In Menu: " + PlayerManager.instance.isInMenu);
+            }
 
             // Set default value 
             UI_CraftList craftList = _menu.GetComponentInChildren<UI_CraftList>();
@@ -59,10 +73,31 @@ public class UI : MonoBehaviour
         if (_menu != null && _menu.activeInHierarchy)
         {
             _menu.SetActive(false);
-            InGameUI.SetActive(true);
+            inGameUI.SetActive(true);
+            if (PlayerManager.instance != null)
+            {
+                PlayerManager.instance.isInMenu = false;
+                Debug.Log("Is In Menu: " + PlayerManager.instance.isInMenu);
+
+            }
             return;
         }
 
+
         SwitchTo(_menu);
     }
+
+    public void SwitchToDieUI()
+    {
+        fadeScreen.FadeOut();
+        StartCoroutine(ShowDieMsgDelay(1f));
+    }
+
+    private IEnumerator ShowDieMsgDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        dieScreen.ShowDieMessage();
+    }
+
+    public void RestartThisScene() => GameManager.instance.RestartScene();
 }

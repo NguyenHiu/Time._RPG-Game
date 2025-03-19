@@ -15,6 +15,7 @@ MonoBehaviour:
   itemType: 1
   itemName: Healing Flask
   icon: {fileID: -410334530, guid: a9ca9a41598dd2e44b125928045c518f, type: 3}
+  itemID: c691c29ba5d09c5478cb9fe692d92597
   equipmentType: 3
   itemCooldown: 2
   itemEffects:
@@ -23,7 +24,7 @@ MonoBehaviour:
   agility: 0
   intelligent: 0
   vitality: 0
-  maxHP: 0
+  maxHP: 30
   armor: 0
   evasion: 0
   damage: 0

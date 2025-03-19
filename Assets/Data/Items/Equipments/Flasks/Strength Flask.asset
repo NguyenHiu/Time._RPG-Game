@@ -15,11 +15,12 @@ MonoBehaviour:
   itemType: 1
   itemName: Strength Flask
   icon: {fileID: 1463097486, guid: a9ca9a41598dd2e44b125928045c518f, type: 3}
+  itemID: b9035ce9a1f268f4da63ee7691114b2b
   equipmentType: 3
   itemCooldown: 10
   itemEffects:
   - {fileID: 11400000, guid: 59e6c8f7aabb0bf418ed19530d3bb23f, type: 2}
-  strength: 0
+  strength: 20
   agility: 0
   intelligent: 0
   vitality: 0
@@ -31,5 +32,5 @@ MonoBehaviour:
   critPower: 0
   fireDamage: 0
   iceDamage: 0
-  lightningDamage: 0
+  lightingDamage: 0
   requiredMaterials: []
