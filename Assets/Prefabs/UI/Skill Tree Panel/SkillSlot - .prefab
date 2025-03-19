@@ -133,11 +133,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aec99e27e7cad374fb6294b50e6653f5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  skillIcon: {fileID: 0}
   skillName: 
   skillDescription: 
+  skillPrice: 0
   isLocked: 1
   shouldBeUnlocked: []
   shouldBeLocked: []
   lockedColor: {r: 0, g: 0, b: 0, a: 0}
-  unlockedColor: {r: 0, g: 0, b: 0, a: 0}

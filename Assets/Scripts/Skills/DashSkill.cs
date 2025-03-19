@@ -30,7 +30,6 @@ public class DashSkill : Skill
 
     private void UnlockDash()
     {
-        Debug.Log("Attemp to unlock dash");
         if (!dashSkillSlot.isLocked)
             canDash = true;
     }

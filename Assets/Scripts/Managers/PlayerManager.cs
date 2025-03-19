@@ -6,6 +6,7 @@ public class PlayerManager : MonoBehaviour, IGameData
     public static PlayerManager instance;
     public Player player;
     public Action OnCurrencyUpdated;
+    public bool isInMenu = false;
 
     public int currency;
     public void Awake()

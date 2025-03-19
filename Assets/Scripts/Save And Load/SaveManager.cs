@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -36,6 +37,16 @@ public class SaveManager : MonoBehaviour
     {
         IEnumerable<IGameData> data = FindObjectsOfType<MonoBehaviour>().OfType<IGameData>();
         return new List<IGameData>(data);
+    }
+
+    public void Delete()
+    {
+        fileHandler.Delete();
+    }
+
+    public bool HasGameData()
+    {
+        return fileHandler.Load() != null;
     }
 
     public void NewGame()
